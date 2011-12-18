@@ -1,1 +1,25 @@
-Hello, world!
+Welcome to the University of Washington USLI code repository!
+
+What is included:
+    README          - This file
+    USLIPayload.ino - Main driver program
+    libraries/      - Functions to interface with payload's sensors.
+
+Downloading a copy:
+    1: Check out a copy of the source.
+    2: Copy the contents of the <libraries> directory into <Arduino\libraries>
+       (The "Arduino" folder is the one that contains all your sketches.
+       If you are using Windows, it's normally found in My Documents.)
+    3: Open the Arduino SDK and load "USLIPayload.ino".
+
+Editing the source:
+    1: USLIPayload.ino and README may be modified directly.
+    2: Libraries must be edited in place, in the <Arduino\libraries> directory.
+
+Uploading revisions:
+    1: Copy the contents of <Arduino\libraries> back into <libraries>
+    2: Commit changes, then push to the main repository.
+
+See also:
+    The git tutorial: http://help.github.com/win-set-up-git/
+    If you still have questions (or need an answer quickly), email.
