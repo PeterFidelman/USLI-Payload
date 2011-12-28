@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <meta name="google-site-verification" content="XUb2UlchrvwCWWyhXksBlqQy1STYtTEN_M0-tgQRHRs" />
+    <meta name="google-site-verification" content="gRUAvzBJ_533b-AGTmldOJfByU6TkojfUbWovB2wKJo" />
+    <title>BMP085 Barometric Pressure Sensor Quickstart - SparkFun Electronics</title>
+    <link rel="stylesheet" href="/css/screen.css?rev=1324072176" type="text/css" media="screen" />
+    <link rel="stylesheet" href="/css/print.css?rev=1324072176" type="text/css" media="print" />
+    <link rel="stylesheet" href="/css/fancybox.css?rev=1324072176" type="text/css" media="screen" />
+    <!-- IE is the bane of my existence. -->
+    <!--[if IE]><link rel="stylesheet" href="/css/ie.css" type="text/css" media="screen" /><![endif]-->
+    <!--[if lte IE 7]><link rel="stylesheet" href="/css/ie7.css" type="text/css" media="screen" /><![endif]-->
+    <link rel="alternate" type="application/rss+xml" title="All News" href="http://www.sparkfun.com/feeds/news/" />
+    <link rel="alternate" type="application/rss+xml" title="New Products" href="http://www.sparkfun.com/feeds/products/" />
+    <link rel="alternate" type="application/rss+xml" title="All Product Changes" href="http://www.sparkfun.com/feeds/changes/" />
+    <link rel="alternate" type="application/rss+xml" title="All Comments" href="http://www.sparkfun.com/feeds/comments/" />
+    <link rel="alternate" type="application/rss+xml" title="Videos" href="http://gdata.youtube.com/feeds/base/users/sparkfun/uploads?alt=rss&v=2&orderby=published" />
+     
+    <link rel="apple-touch-icon" href="/fanboy.png" />
+    <link rev="canonical" type="text/html" href="http://sprkfn.com/t253" /> 
+    <script>
+            var SFECONFIG = {
+        currencies: {"USD":{"code":"USD","title":"US Dollar","symbol_left":"$","symbol_right":"","decimal_point":".","thousands_point":",","decimal_places":"2","value":"1.0000"},"CAD":{"code":"CAD","title":"Canadian Dollar","symbol_left":"$","symbol_right":null,"decimal_point":".","thousands_point":",","decimal_places":"2","value":"1.0106"},"AUD":{"code":"AUD","title":"Australian Dollar","symbol_left":"$","symbol_right":null,"decimal_point":".","thousands_point":",","decimal_places":"2","value":"0.9729"},"GBP":{"code":"GBP","title":"British Pound","symbol_left":"&pound;","symbol_right":null,"decimal_point":".","thousands_point":",","decimal_places":"2","value":"0.6226"},"EUR":{"code":"EUR","title":"Euro","symbol_left":"&euro;","symbol_right":null,"decimal_point":".","thousands_point":",","decimal_places":"2","value":"0.7273"}},
+        preferred_currency: 'USD',
+        http_server: 'http://www.sparkfun.com',
+        https_server: 'https://www.sparkfun.com',
+        http_static: 'http://dlnmh9ip6v2uc.cloudfront.net',
+        base_url: '/',
+        url: '/',
+        controller: 'tutorials',
+        action: 'view',
+        entity_id: '253',
+        auth: false,
+        sparkrev: '1324072176'
+      };
+
+    </script>
+    <script data-main="/js/sfe" src="/js/require-jquery.js"></script>
+    <script type="text/javascript">
+      $(document).bind('loaded', function() {
+        $('*[data="fancybox"]').fancybox('fancybox', { speedIn: 10, speedOut: 10 });
+        $("img.lazyload").lazyload('lazyload', { placeholder: "http://dlnmh9ip6v2uc.cloudfront.net/images/framework/blank.gif" });
+      });
+    </script>
+  </head>
+  <body>
+    <div id="airlock" class="clearfix">
+
+      
+<div id=header>
+  <a href="http://www.sparkfun.com/"><img width=188 height=105 class=logo src="http://dlnmh9ip6v2uc.cloudfront.net/images/framework/logo.gif" title="SparkFun Electronics" alt="SparkFun Electronics"></a>
+  <a href="#products_menu" class=skip>Skip to menu</a>
+  <a href="#content" class=skip>Skip to content</a>
+
+    <div id="banner">
+    <div id=banner-nav style="display: none;">
+      <div class="sprites" id="banner-goprev" style="height: 23px; width: 23px; background-position: -23px -0px;">&nbsp;</div>
+      <a href="/banners/"><div class="sprites" id="banner-all"    style="height: 23px; width: 23px; background-position: -0px -0px;">&nbsp;</div></a>
+      <div class="sprites" id="banner-gonext" style="height: 23px; width: 23px; background-position: -46px -0px;">&nbsp;</div>
+    </div>
+    <a id=banner-link href="http://www.sparkfun.com/static/about" onclick="$(this).sfe('track_link', this,'Banners','clicked','banner-61');return false;"><img width=978 height=105 id=banner-img src="http://dlnmh9ip6v2uc.cloudfront.net/images/banners/SFE03.0003.WhatIsThisPlace-04.jpg" alt=""></a>
+  </div>
+  <script type="text/javascript">
+    $('#airlock').bind('loaded', function() {
+      $(this).banner({id: 61});
+    });
+  </script>
+
+  <div id=header-menu>
+    <ul>
+      <li><a href="http://www.sparkfun.com/categories">Products</a></li>
+      <li><a href="http://www.sparkfun.com/static/customer_service">Customer Service</a></li>
+      <li class=active><a href="http://www.sparkfun.com/tutorials">Tutorials</a></li>
+      <li><a href="http://www.sparkfun.com/distributors">Distributors</a></li>
+      <li><a href="http://www.sparkfun.com/static/about">About Us</a></li>
+      <li class=nextlast><a href="http://www.sparkfun.com/static/contact">Contact</a></li>
+      <li class=last>
+        <form class=search style="display: block" action="http://www.sparkfun.com/search/results" id=search_form method=get>
+          <input name=term type=search value="" placeholder="search..." />
+          <input type=hidden name=what value=products />
+          <input type=submit value=Go class="button small" />
+        </form>
+      </li>
+    </ul>
+  </div>
+</div>
+
+      <div id="left">
+        <h2 class="sidebar sidebar-bottom" id="products_menu"><a href="http://www.sparkfun.com/categories">Categories</a></h2>
+        
+<ul id="category_menu_list" class="sidebar sidebar-bottom" style="display: block">
+  <li id="menu_category_new_products"><span class="arrow"></span><a href="http://www.sparkfun.com/categories/new_products" >New Products</a></li>
+  <li id="menu_category_top"><span class="arrow"></span><a href="http://www.sparkfun.com/categories/top" >Top Sellers</a></li>
+  <li id="menu_category_featured"><span class="arrow"></span><a href="http://www.sparkfun.com/categories/featured" >Staff Picks</a></li>
+    <li id="menu_category_gift_certificates"><span class="arrow"></span><a href="https://www.sparkfun.com/gift_certificates" >Gift Certificates</a></li>
+  <li><hr /></li>
+  <li id="menu_category_176"><span class="arrow"></span><a href="http://www.sparkfun.com/categories/176" >Books</a></li><li id="menu_category_20"><span class="arrow"></span><a href="http://www.sparkfun.com/categories/20" >Breakout Boards</a></li><li id="menu_category_70"><span class="arrow">&#9658;</span><a href="http://www.sparkfun.com/categories/70" >Cables</a><ul style="display:none;"><li id="menu_category_140"><a href="http://www.sparkfun.com/categories/140" >Audio</a></li><li id="menu_category_150"><a href="http://www.sparkfun.com/categories/150" >Ethernet</a></li><li id="menu_category_72"><a href="http://www.sparkfun.com/categories/72" >Hook Up</a></li><li id="menu_category_75"><a href="http://www.sparkfun.com/categories/75" >Parallel</a></li><li id="menu_category_74"><a href="http://www.sparkfun.com/categories/74" >Serial</a></li><li id="menu_category_71"><a href="http://www.sparkfun.com/categories/71" >USB</a></li></ul></li><li id="menu_category_66"><span class="arrow">&#9658;</span><a href="http://www.sparkfun.com/categories/66" >Cellular</a><ul style="display:none;"><li id="menu_category_67"><a href="http://www.sparkfun.com/categories/67" >Antennas</a></li><li id="menu_category_69"><a href="http://www.sparkfun.com/categories/69" >Eval Boards</a></li><li id="menu_category_68"><a href="http://www.sparkfun.com/categories/68" >Modules</a></li></ul></li><li id="menu_category_154"><span class="arrow"></span><a href="http://www.sparkfun.com/categories/154" >Classes</a></li><li id="menu_category_51"><span class="arrow">&#9658;</span><a href="http://www.sparkfun.com/categories/51" >Components</a><ul style="display:none;"><li id="menu_category_87"><a href="http://www.sparkfun.com/categories/87" >ARM Microcontrollers</a></li><li id="menu_category_21"><a href="http://www.sparkfun.com/categories/21" >AVR Microcontrollers</a></li><li id="menu_category_145"><a href="http://www.sparkfun.com/categories/145" >Buttons/Switches</a></li><li id="menu_category_226"><a href="http://www.sparkfun.com/categories/226" >EL</a></li><li id="menu_category_60"><a href="http://www.sparkfun.com/categories/60" >General</a></li><li id="menu_category_90"><a href="http://www.sparkfun.com/categories/90" >General ICs</a></li><li id="menu_category_89"><a href="http://www.sparkfun.com/categories/89" >LEDs</a><ul><li id="menu_category_173"><a href="http://www.sparkfun.com/categories/173" >10mm</a></li><li id="menu_category_171"><a href="http://www.sparkfun.com/categories/171" >3mm</a></li><li id="menu_category_172"><a href="http://www.sparkfun.com/categories/172" >5mm</a></li><li id="menu_category_170"><a href="http://www.sparkfun.com/categories/170" >7-Segment</a></li><li id="menu_category_175"><a href="http://www.sparkfun.com/categories/175" >Other</a></li><li id="menu_category_174"><a href="http://www.sparkfun.com/categories/174" >SMD</a></li></ul></li><li id="menu_category_88"><a href="http://www.sparkfun.com/categories/88" >Oscillators</a></li><li id="menu_category_22"><a href="http://www.sparkfun.com/categories/22" >PIC Microcontrollers</a></li><li id="menu_category_124"><a href="http://www.sparkfun.com/categories/124" >PICAXE Microcontrollers</a></li><li id="menu_category_132"><a href="http://www.sparkfun.com/categories/132" >PSoC Microcontrollers</a></li><li id="menu_category_29"><a href="http://www.sparkfun.com/categories/29" >SMD ICs</a></li></ul></li><li id="menu_category_2"><span class="arrow">&#9658;</span><a href="http://www.sparkfun.com/categories/2" >Development Tools</a><ul style="display:none;"><li id="menu_category_184"><a href="http://www.sparkfun.com/categories/184" >.NET</a></li><li id="menu_category_93"><a href="http://www.sparkfun.com/categories/93" >ADuC</a></li><li id="menu_category_218"><a href="http://www.sparkfun.com/categories/218" >Android</a></li><li id="menu_category_103"><a href="http://www.sparkfun.com/categories/103" >Arduino</a></li><li id="menu_category_219"><a href="http://www.sparkfun.com/categories/219" >ARM</a></li><li id="menu_category_10"><a href="http://www.sparkfun.com/categories/10" >AVR</a></li><li id="menu_category_164"><a href="http://www.sparkfun.com/categories/164" >Beagle</a></li><li id="menu_category_187"><a href="http://www.sparkfun.com/categories/187" >Chumby</a></li><li id="menu_category_109"><a href="http://www.sparkfun.com/categories/109" >Coridium</a></li><li id="menu_category_136"><a href="http://www.sparkfun.com/categories/136" >FPGA</a></li><li id="menu_category_101"><a href="http://www.sparkfun.com/categories/101" >iPod</a></li><li id="menu_category_25"><a href="http://www.sparkfun.com/categories/25" >LPC</a></li><li id="menu_category_230"><a href="http://www.sparkfun.com/categories/230" >mbed</a></li><li id="menu_category_11"><a href="http://www.sparkfun.com/categories/11" >MSP</a></li><li id="menu_category_9"><a href="http://www.sparkfun.com/categories/9" >PIC</a></li><li id="menu_category_125"><a href="http://www.sparkfun.com/categories/125" >PICAXE</a></li><li id="menu_category_137"><a href="http://www.sparkfun.com/categories/137" >PSoC</a></li><li id="menu_category_104"><a href="http://www.sparkfun.com/categories/104" >Roomba</a></li><li id="menu_category_94"><a href="http://www.sparkfun.com/categories/94" >SAM</a></li><li id="menu_category_95"><a href="http://www.sparkfun.com/categories/95" >ST</a></li><li id="menu_category_167"><a href="http://www.sparkfun.com/categories/167" >STAMP</a></li><li id="menu_category_107"><a href="http://www.sparkfun.com/categories/107" >Wiring</a></li><li id="menu_category_169"><a href="http://www.sparkfun.com/categories/169" >WIZnet</a></li><li id="menu_category_166"><a href="http://www.sparkfun.com/categories/166" >XMOS</a></li><li id="menu_category_142"><a href="http://www.sparkfun.com/categories/142" >Zune</a></li></ul></li><li id="menu_category_100"><span class="arrow"></span><a href="http://www.sparkfun.com/categories/100" >Dings and Dents</a></li><li id="menu_category_204"><span class="arrow">&#9658;</span><a href="http://www.sparkfun.com/categories/204" >E-Textiles</a><ul style="display:none;"><li id="menu_category_205"><a href="http://www.sparkfun.com/categories/205" >Aniomagic</a></li><li id="menu_category_210"><a href="http://www.sparkfun.com/categories/210" >fabrickit</a></li><li id="menu_category_135"><a href="http://www.sparkfun.com/categories/135" >LilyPad</a></li><li id="menu_category_206"><a href="http://www.sparkfun.com/categories/206" >Materials</a></li></ul></li><li id="menu_category_4"><span class="arrow">&#9658;</span><a href="http://www.sparkfun.com/categories/4" >GPS</a><ul style="display:none;"><li id="menu_category_18"><a href="http://www.sparkfun.com/categories/18" >Antennas</a></li><li id="menu_category_86"><a href="http://www.sparkfun.com/categories/86" >Eval Boards</a></li><li id="menu_category_17"><a href="http://www.sparkfun.com/categories/17" >Modules</a></li></ul></li><li id="menu_category_157"><span class="arrow"></span><a href="http://www.sparkfun.com/categories/157" >Kits</a></li><li id="menu_category_76"><span class="arrow">&#9658;</span><a href="http://www.sparkfun.com/categories/76" >LCDs</a><ul style="display:none;"><li id="menu_category_147"><a href="http://www.sparkfun.com/categories/147" >Color</a></li><li id="menu_category_148"><a href="http://www.sparkfun.com/categories/148" >Monochrome</a></li></ul></li><li id="menu_category_96"><span class="arrow"></span><a href="http://www.sparkfun.com/categories/96" >Port-O-Rotary</a></li><li id="menu_category_1"><span class="arrow">&#9658;</span><a href="http://www.sparkfun.com/categories/1" >Programmers</a><ul style="display:none;"><li id="menu_category_26"><a href="http://www.sparkfun.com/categories/26" >ARM</a></li><li id="menu_category_7"><a href="http://www.sparkfun.com/categories/7" >AVR</a></li><li id="menu_category_37"><a href="http://www.sparkfun.com/categories/37" >MAXQ</a></li><li id="menu_category_6"><a href="http://www.sparkfun.com/categories/6" >PIC</a></li><li id="menu_category_126"><a href="http://www.sparkfun.com/categories/126" >PICAXE</a></li><li id="menu_category_168"><a href="http://www.sparkfun.com/categories/168" >XMOS</a></li></ul></li><li id="menu_category_53"><span class="arrow">&#9658;</span><a href="http://www.sparkfun.com/categories/53" >Prototyping</a><ul style="display:none;"><li id="menu_category_54"><a href="http://www.sparkfun.com/categories/54" >Batteries</a></li><li id="menu_category_149"><a href="http://www.sparkfun.com/categories/149" >Boards</a></li><li id="menu_category_91"><a href="http://www.sparkfun.com/categories/91" >Connectors</a></li><li id="menu_category_182"><a href="http://www.sparkfun.com/categories/182" >Enclosures</a></li><li id="menu_category_55"><a href="http://www.sparkfun.com/categories/55" >General</a></li><li id="menu_category_155"><a href="http://www.sparkfun.com/categories/155" >Hardware</a></li><li id="menu_category_92"><a href="http://www.sparkfun.com/categories/92" >Sockets</a></li><li id="menu_category_116"><a href="http://www.sparkfun.com/categories/116" >Solar</a></li><li id="menu_category_141"><a href="http://www.sparkfun.com/categories/141" >Wire</a></li></ul></li><li id="menu_category_207"><span class="arrow">&#9658;</span><a href="http://www.sparkfun.com/categories/207" >Retail</a><ul style="display:none;"><li id="menu_category_212"><a href="http://www.sparkfun.com/categories/212" >Arduino</a></li><li id="menu_category_216"><a href="http://www.sparkfun.com/categories/216" >Components</a></li><li id="menu_category_213"><a href="http://www.sparkfun.com/categories/213" >Kits</a></li><li id="menu_category_211"><a href="http://www.sparkfun.com/categories/211" >Materials</a></li><li id="menu_category_215"><a href="http://www.sparkfun.com/categories/215" >Prototyping</a></li><li id="menu_category_214"><a href="http://www.sparkfun.com/categories/214" >Sensors</a></li><li id="menu_category_217"><a href="http://www.sparkfun.com/categories/217" >Tools</a></li><li id="menu_category_220"><a href="http://www.sparkfun.com/categories/220" >Wireless</a></li></ul></li><li id="menu_category_134"><span class="arrow">&#9658;</span><a href="http://www.sparkfun.com/categories/134" >Retired</a><ul style="display:none;"><li id="menu_category_194"><a href="http://www.sparkfun.com/categories/194" >Breakout Boards</a></li><li id="menu_category_203"><a href="http://www.sparkfun.com/categories/203" >Cables</a></li><li id="menu_category_228"><a href="http://www.sparkfun.com/categories/228" >Cellular</a></li><li id="menu_category_200"><a href="http://www.sparkfun.com/categories/200" >Classes</a></li><li id="menu_category_192"><a href="http://www.sparkfun.com/categories/192" >Components</a></li><li id="menu_category_191"><a href="http://www.sparkfun.com/categories/191" >Development Tools</a></li><li id="menu_category_225"><a href="http://www.sparkfun.com/categories/225" >Ding and Dent</a></li><li id="menu_category_227"><a href="http://www.sparkfun.com/categories/227" >E-Textiles</a></li><li id="menu_category_188"><a href="http://www.sparkfun.com/categories/188" >GPS</a></li><li id="menu_category_190"><a href="http://www.sparkfun.com/categories/190" >Kits</a></li><li id="menu_category_196"><a href="http://www.sparkfun.com/categories/196" >LCD</a></li><li id="menu_category_201"><a href="http://www.sparkfun.com/categories/201" >Programmers</a></li><li id="menu_category_195"><a href="http://www.sparkfun.com/categories/195" >Prototyping</a></li><li id="menu_category_197"><a href="http://www.sparkfun.com/categories/197" >Robotics</a></li><li id="menu_category_189"><a href="http://www.sparkfun.com/categories/189" >Sensors</a></li><li id="menu_category_208"><a href="http://www.sparkfun.com/categories/208" >SFE Widgets</a></li><li id="menu_category_198"><a href="http://www.sparkfun.com/categories/198" >Swag</a></li><li id="menu_category_193"><a href="http://www.sparkfun.com/categories/193" >Tools</a></li><li id="menu_category_199"><a href="http://www.sparkfun.com/categories/199" >Wireless</a></li></ul></li><li id="menu_category_31"><span class="arrow">&#9658;</span><a href="http://www.sparkfun.com/categories/31" >Robotics</a><ul style="display:none;"><li id="menu_category_179"><a href="http://www.sparkfun.com/categories/179" >Drivers</a></li><li id="menu_category_181"><a href="http://www.sparkfun.com/categories/181" >Kits</a></li><li id="menu_category_178"><a href="http://www.sparkfun.com/categories/178" >Motors</a></li><li id="menu_category_202"><a href="http://www.sparkfun.com/categories/202" >Other</a></li><li id="menu_category_180"><a href="http://www.sparkfun.com/categories/180" >Wheels</a></li></ul></li><li id="menu_category_185"><span class="arrow"></span><a href="http://www.sparkfun.com/categories/185" >Sale</a></li><li id="menu_category_23"><span class="arrow">&#9658;</span><a href="http://www.sparkfun.com/categories/23" >Sensors</a><ul style="display:none;"><li id="menu_category_80"><a href="http://www.sparkfun.com/categories/80" >Accelerometers</a><ul><li id="menu_category_161"><a href="http://www.sparkfun.com/categories/161" >1-axis</a></li><li id="menu_category_163"><a href="http://www.sparkfun.com/categories/163" >3-axis</a></li></ul></li><li id="menu_category_146"><a href="http://www.sparkfun.com/categories/146" >Biometrics</a></li><li id="menu_category_117"><a href="http://www.sparkfun.com/categories/117" >Capacitive</a></li><li id="menu_category_151"><a href="http://www.sparkfun.com/categories/151" >Current</a></li><li id="menu_category_143"><a href="http://www.sparkfun.com/categories/143" >Flex / Force</a></li><li id="menu_category_85"><a href="http://www.sparkfun.com/categories/85" >Gyros</a><ul><li id="menu_category_158"><a href="http://www.sparkfun.com/categories/158" >1-axis</a></li><li id="menu_category_159"><a href="http://www.sparkfun.com/categories/159" >2-axis</a></li><li id="menu_category_183"><a href="http://www.sparkfun.com/categories/183" >3-axis</a></li></ul></li><li id="menu_category_144"><a href="http://www.sparkfun.com/categories/144" >ID</a></li><li id="menu_category_160"><a href="http://www.sparkfun.com/categories/160" >IMU</a></li><li id="menu_category_139"><a href="http://www.sparkfun.com/categories/139" >Infrared</a></li><li id="menu_category_102"><a href="http://www.sparkfun.com/categories/102" >Light / Imaging</a></li><li id="menu_category_83"><a href="http://www.sparkfun.com/categories/83" >Magneto</a></li><li id="menu_category_84"><a href="http://www.sparkfun.com/categories/84" >Proximity</a></li><li id="menu_category_165"><a href="http://www.sparkfun.com/categories/165" >Radiation</a></li><li id="menu_category_186"><a href="http://www.sparkfun.com/categories/186" >Sound</a></li><li id="menu_category_82"><a href="http://www.sparkfun.com/categories/82" >Temperature</a></li><li id="menu_category_152"><a href="http://www.sparkfun.com/categories/152" >Weather</a></li></ul></li><li id="menu_category_97"><span class="arrow"></span><a href="http://www.sparkfun.com/categories/97" >SFE Widgets</a></li><li id="menu_category_130"><span class="arrow"></span><a href="http://www.sparkfun.com/categories/130" >Swag</a></li><li id="menu_category_46"><span class="arrow">&#9658;</span><a href="http://www.sparkfun.com/categories/46" >Tools</a><ul style="display:none;"><li id="menu_category_47"><a href="http://www.sparkfun.com/categories/47" >Hand Tools</a></li><li id="menu_category_48"><a href="http://www.sparkfun.com/categories/48" >Hot-Air Rework</a></li><li id="menu_category_177"><a href="http://www.sparkfun.com/categories/177" >Instruments</a></li><li id="menu_category_221"><a href="http://www.sparkfun.com/categories/221" >Organization</a></li><li id="menu_category_28"><a href="http://www.sparkfun.com/categories/28" >Power Supplies</a></li><li id="menu_category_49"><a href="http://www.sparkfun.com/categories/49" >Soldering</a></li></ul></li><li id="menu_category_138"><span class="arrow"></span><a href="http://www.sparkfun.com/categories/138" >Tracking</a></li><li id="menu_category_16"><span class="arrow">&#9658;</span><a href="http://www.sparkfun.com/categories/16" >Wireless</a><ul style="display:none;"><li id="menu_category_78"><a href="http://www.sparkfun.com/categories/78" >Antennas</a></li><li id="menu_category_115"><a href="http://www.sparkfun.com/categories/115" >Bluetooth</a></li><li id="menu_category_79"><a href="http://www.sparkfun.com/categories/79" >General</a></li><li id="menu_category_113"><a href="http://www.sparkfun.com/categories/113" >Modem</a></li><li id="menu_category_114"><a href="http://www.sparkfun.com/categories/114" >Nordic</a></li><li id="menu_category_112"><a href="http://www.sparkfun.com/categories/112" >WiFi</a></li><li id="menu_category_111"><a href="http://www.sparkfun.com/categories/111" >Zigbee/802.15.4</a><ul><li id="menu_category_222"><a href="http://www.sparkfun.com/categories/222" >900MHz</a></li><li id="menu_category_223"><a href="http://www.sparkfun.com/categories/223" >Series 1</a></li><li id="menu_category_224"><a href="http://www.sparkfun.com/categories/224" >Series 2 (ZB)</a></li></ul></li></ul></li>  <li><hr /></li>
+  <li>
+    <img style='float: left' src="http://dlnmh9ip6v2uc.cloudfront.net/images/framework/pdf.gif" />
+    <a href="http://sparkfun.com/download/PDFs/catalog.pdf">Full catalog</a>
+  </li>
+</ul>
+        <br />
+      </div>
+
+      <div id="right">
+        <div class="collapsible user">
+  <p class=cart-link><img height=19 width=19 alt="" src="http://dlnmh9ip6v2uc.cloudfront.net/images/framework/icon_shoppingcart.gif"> 
+     <a href="http://www.sparkfun.com/cart"><span id=items_in_cart>0</span> items in your cart</a></p>
+  <form action="https://www.sparkfun.com/account/login" id=login method=post>
+    <label for=user_login>Email</label>
+    <input id=user_login type=text tabindex=1 name=user>
+    <label for=user_password>Password</label>
+    <input id=user_password type=password tabindex=2 name=passwd>
+    <p class=right><input type=submit value="log in" class=button></p>
+    <p><a href="https://www.sparkfun.com/account/forgot_password">Forgot your password?</a><br/>
+       No account? <a href="https://www.sparkfun.com/account/make">Register here</a>.</p>
+  </form>
+</div>
+<br>
+
+
+        <h2 id="resources_menu" class="collapsible"><span class="arrow"></span>Resources</h2>
+        <ul class="collapsible resources" style="display: block">
+  <li>
+    <a title="RSS Feeds" href="http://www.sparkfun.com/feeds">Feeds</a>    <img src="http://dlnmh9ip6v2uc.cloudfront.net/images/icons/rss-noborder.png" />
+  </li>
+  <li><a href="http://forum.sparkfun.com/">Forum</a></li>
+  <li><a href="http://www.sparkfun.com/news/263">SparkFun IRC Channel</a></li>
+  <li><a href="http://www.batchpcb.com/" title="Custom PCB fabrication">BatchPCB</a></li>
+  <li><a href="http://www.opencircuits.com/">Open Circuits</a></li>
+  <li><a href="http://www.ponoko.com/make-and-sell/electronics">Ponoko - Your Personal Factory</a></li>
+  <li><a href="http://www.sparkfun.com/jobs">Jobs @ SparkFun</a></li>
+  <li><a href="http://www.sparkfun.com/tutorials/92">Sell Your Widget on SparkFun</a></li>
+  <li><a href="http://www.sparkfun.com/quiz">Take the SparkFun Quiz</a></li>
+</ul>
+        <br />
+
+        <h2 id="currency_menu_head" class="collapsible"><span class="arrow"></span>Currency</h2>
+        
+<div class="collapsible" id="currency_menu">
+  Display prices in
+  <input type="hidden" id="preferred_currency" value="USD" />
+  <ul id="currency_menu_list" class="currency">
+          <li>
+        <a id="currency_USD" onclick="$('#airlock').currency('change', 'USD'); return(false);" href="#">
+                  <img src="http://dlnmh9ip6v2uc.cloudfront.net/images/framework/icon_radio_checked.gif" />
+                US Dollar        </a>
+    </li>
+          <li>
+        <a id="currency_CAD" onclick="$('#airlock').currency('change', 'CAD'); return(false);" href="#">
+                  <img src="http://dlnmh9ip6v2uc.cloudfront.net/images/framework/icon_radio_unchecked.gif" />
+                Canadian Dollar        </a>
+    </li>
+          <li>
+        <a id="currency_AUD" onclick="$('#airlock').currency('change', 'AUD'); return(false);" href="#">
+                  <img src="http://dlnmh9ip6v2uc.cloudfront.net/images/framework/icon_radio_unchecked.gif" />
+                Australian Dollar        </a>
+    </li>
+          <li>
+        <a id="currency_GBP" onclick="$('#airlock').currency('change', 'GBP'); return(false);" href="#">
+                  <img src="http://dlnmh9ip6v2uc.cloudfront.net/images/framework/icon_radio_unchecked.gif" />
+                British Pound        </a>
+    </li>
+          <li>
+        <a id="currency_EUR" onclick="$('#airlock').currency('change', 'EUR'); return(false);" href="#">
+                  <img src="http://dlnmh9ip6v2uc.cloudfront.net/images/framework/icon_radio_unchecked.gif" />
+                Euro        </a>
+    </li>
+      </ul>
+  </div>
+
+        <br />
+
+        <h2 id="feedback_menu" class="collapsible"><span class="arrow"></span>Feedback</h2>
+        <form id="feedback" class="collapsible" style="display: block" action="/feedback/mind.json">
+  <input type="hidden" name="sparkaptcha" id="sparkaptcha" value="0">
+  <div class="error" id="error_feedback" style="display: none; color: #F03528; font-weight: bold; margin-bottom: 5px;"></div>
+  <label for="feedback_textarea" style="font-weight: bold">What's on your mind?</label>
+  <br />
+  <textarea id="feedback_textarea" name="feedback_text"></textarea>
+  <div class="error" id="error_feedback_text" style="display: none; color: #F03528; font-weight: bold; padding-left: 2px;"></div>
+  <br />
+  <label for="dest">For which department?</label><br/>
+  <select name="dest" id="feedback_dest" style="width: 99%">
+    <option value="general">General</option>
+    <option value="cust">Customer Service</option>
+    <option value="tech">Tech Support</option>
+  </select>
+  <br/><br/>
+  <label for="feedback_email">Please include your email address if you'd like us to respond to a specific question.</label>
+  <br />
+  <br />
+  <input type="text" id="feedback_email" name="email" />
+  <div class="error" id="error_feedback_email" style="display: none; color: #F03528; font-weight: bold; padding-left: 2px; margin-bottom: 5px;"></div>
+  <input onclick="$(this).sfe('mind_feedback'); return(false);" type="button" class="button" value="Submit" /> 
+</form>
+<script>
+  $(document).bind('loaded', function() {
+    $('#sparkaptcha').val(1);
+  });
+</script>
+      </div>
+
+      <div id="center">
+        <a name="content" id="content"></a>
+        
+<h1 class=red-header>
+    <a href="http://www.sparkfun.com">Home</a>
+  <span class=breadcrumb-separator> | </span>  <a href="http://www.sparkfun.com/tutorials/">Tutorials</a>
+  <span class=breadcrumb-separator> | </span>  BMP085 Barometric Pressure Sensor Quickstart 
+</h1>
+
+<div class=news>
+  <p class=header>
+    <img src="https://static.sparkfun.com/avatar/f2ed505f510e392f58811e4aa03e6fe0?d=retro&s=30&r=pg" height=30 width=30 />
+    <a class=title href="http://www.sparkfun.com/tutorials/253">BMP085 Barometric Pressure Sensor Quickstart</a>
+    <br />
+    by <a href="http://www.sparkfun.com/users/69916">Jimb0</a> | January 21, 2011 | <i><a href="#comments" onclick="javascript: if(!$('#comments').is(':visible')) { $('#comments_header').sfe('toggle_collapsible'); } $('#comments_header').scrollTo(); return false;">8 comments</a></i>
+    <span class=skill>
+      Skill Level: 
+              <img class=star src="http://dlnmh9ip6v2uc.cloudfront.net/images/framework/icon_skill_beginner.gif" />
+        Beginner
+          </span>
+  </p>
+  <hr />
+  <h3 class="western">
+	BMP085 Quickstart Guide</h3>
+<p>
+	<span style="font-style: normal;">Bosch&#39;s BMP085 is a rock-solid <a href="http://en.wikipedia.org/wiki/Barometric_pressure" target="_blank">barometric pressure</a> sensor. It features a measuring range of anywhere between 30,000 and </span>110,000 Pa.<span style="font-style: normal;"> &#39;Pa&#39; meaning the <a href="http://en.wikipedia.org/wiki/Pascal_%28unit%29" target="_blank">Pascal</a> unit, which you&#39;ll probably more often see converted to hPa (hectoPascal), equal to 100 Pa, or kPa (kiloPascal), which is 1000 Pa. As a bonus the BMP085 also provides a <strong>temperature</strong> measurement, anywhere from 0 to 65 </span><font face="Times New Roman, serif"><span style="font-style: normal;">&deg;</span></font><font face="Times New Roman, serif"><span style="font-style: normal;">C.</span></font></p>
+<p>
+	<span style="font-style: normal;">The BMP085 has a <strong>digital</strong> interface, I</span><sup><span style="font-style: normal;">2</span></sup><span style="font-style: normal;">C to be specific. This means there may is a bit more overhead to get it talking to your microcontroller, but in return you get data that is much less susceptible to noise and other factors that may hamper an analog signal. </span><span style="font-style: normal;">I</span><sup><span style="font-style: normal;">2</span></sup><span style="font-style: normal;">C is a synchronous two-wire interface, the first wire, SDA, transmits data, while a second wire, SCL, transmits a clock, which is used to keep track of the data. If you&#39;re using an Arduino to talk to the BMP085, the <a href="http://www.google.com/url?sa=t&amp;source=web&amp;cd=1&amp;ved=0CBMQFjAA&amp;url=http%3A%2F%2Fwww.arduino.cc%2Fen%2FReference%2FWire&amp;rct=j&amp;q=arduino%20wire&amp;ei=osU5TarfNMH7lweDs7n_Bg&amp;usg=AFQjCNHa4v6il8gcy0XvBNx5W-FbdYd-Fg&amp;cad=rja" target="_blank">Wire library</a> will conveniently take care of most of the work in communicating with the sensor.</span></p>
+<p style="text-align: center;">
+	<span style="font-style: normal;"><a href="http://www.sparkfun.com/tutorial/Barometric/I2C_data_transfer.png" target="_blank"><img alt="" src="http://www.sparkfun.com/tutorial/Barometric/I2C_data_transfer.png" style="width: 498px; height: 83px;" /></a></span></p>
+<p>
+	<span style="font-style: normal;">As with most SparkFun products, before you start toying around with something, it&#39;s always best to RTFM...err...read the fancy datasheet. The BMP085 <a href="http://www.sparkfun.com/datasheets/Components/General/BST-BMP085-DS000-05.pdf" target="_blank">datasheet</a> covers everything you&#39;d ever need to know about that little sensor on your breakout board.</span></p>
+<h3 class="western">
+	Why do we care about barometric pressure?</h3>
+<p>
+	There are a lot of projects that can make use of barometric pressure data. Here&#39;s at least a couple reasons to care about pressure. You&#39;ve probably heard weather reporters going on about low pressure systems and high pressure systems, that&#39;s because atmospheric pressure can be directly related to changes in <strong>weather</strong>. Low pressure typically means cloudier, rainier, snowier, and just generally uglier weather. While high pressure generally means clearer, sunnier weather. This means the BMP085 would be a perfect component for your Weather Prophet robot.</p>
+<p>
+	A second, widely applied use for pressure sensors is in <strong>altimetry</strong>. Barometric pressure has a measurable relationship with altitude, meaning you can use the BMP085 to deduce how high you (or maybe one of your robots) have climbed. At sea level air pressure is on average 1013 hPa, while here in Boulder, CO, at 5184 ft above sea level, average air pressure is about 831.4 hPa. The measuring limits of the BMP085 should allow you to measure pressure at elevations anywhere between -1640 to about 29,000 ft above sea level.</p>
+<p style="text-align: center;">
+	<a href="http://www.sparkfun.com/tutorial/Barometric/Pressure-Altitude.PNG" target="_blank"><img alt="Pressure and Altitude Relationship" src="http://www.sparkfun.com/tutorial/Barometric/Pressure-Altitude.PNG" style="width: 500px; height: 351px;" /></a></p>
+<h3 class="western">
+	Hardware Explanation and Assembly</h3>
+<p style="font-style: normal;">
+	When you receive the BMP085 Breakout board, you&#39;re presented with a tiny 0.65 x 0.65&rdquo; board with just 4 components, and six un-soldered holes. Your first task will be to <strong>solder</strong> <i>something</i> into those holes to get a good, solid electrical connection. What you solder into those holes is up to you. If I&#39;m using a breadboard I like to stick some <a href="http://www.sparkfun.com/products/116" target="_blank">male headers</a> in there, but simple wires are also a good option. However, if you do choose to go with wire, make sure to keep it short, I<sup>2</sup>C is really only reliable at short distances (a few meters max).</p>
+<p style="font-style: normal; text-align: center;">
+	<em><a href="http://www.sparkfun.com/tutorial/Barometric/BMP085-back.JPG" target="_blank"><img alt="" src="http://www.sparkfun.com/tutorial/Barometric/BMP085-back.JPG" style="width: 150px; height: 154px;" /></a></em></p>
+<p>
+	<span style="font-style: normal;">Now, if you take a gander at the bottom side of the BMP085 Breakout you&#39;ll notice the labels of all six pins: &#39;SDA&#39;, &#39;SCL&#39;, &#39;XCLR&#39;, &#39;EOC&#39;, &#39;GND, and &#39;VCC.&#39; <strong>VCC </strong>and <strong>GND </strong>are obviously the power pins. <strong>SDA </strong>and <strong>SCL </strong>are the I</span><sup><span style="font-style: normal;">2</span></sup><span style="font-style: normal;">C communication lines. SDA being where the data is transmitted, and SCL is the clock that keeps track of that data. The last two pins, XCLR and EOC, are a couple extra functions of the BMP085. <strong>XCLR </strong>acts as a master reset. It&#39;s active-low, so if it&#39;s pulled to GND it will reset the BMP085 and set its registers to their default state. <strong>EOC, </strong>standing for &quot;end of conversion&quot;, is a signal generated by the BMP085 that&#39;s triggered whenever a pressure or temperature conversion has finished. These last two pins are optional, and if you don&#39;t need to use them you can just leave them unconnected.</span></p>
+<table align="center" border="1" cellpadding="1" cellspacing="1" style="width: 250px;">
+	<tbody>
+		<tr>
+			<td style="text-align: center;">
+				<strong>BMP085 Pin</strong></td>
+			<td style="text-align: center;">
+				<strong>Pin Function</strong></td>
+		</tr>
+		<tr>
+			<td style="text-align: center;">
+				VCC</td>
+			<td style="text-align: center;">
+				Power (1.8V-3.6V)</td>
+		</tr>
+		<tr>
+			<td style="text-align: center;">
+				GND</td>
+			<td style="text-align: center;">
+				Ground</td>
+		</tr>
+		<tr>
+			<td style="text-align: center;">
+				EOC</td>
+			<td style="text-align: center;">
+				End of conversion output</td>
+		</tr>
+		<tr>
+			<td style="text-align: center;">
+				XCLR</td>
+			<td style="text-align: center;">
+				Master Clear (low-active)</td>
+		</tr>
+		<tr>
+			<td style="text-align: center;">
+				SCL</td>
+			<td style="text-align: center;">
+				Serial Clock I/O</td>
+		</tr>
+		<tr>
+			<td style="text-align: center;">
+				SDA</td>
+			<td style="text-align: center;">
+				Serial Data I/O</td>
+		</tr>
+	</tbody>
+</table>
+<p>
+	<span style="font-style: normal;">Pay special attention to how you power the BMP085. Its maximum supply voltage is 3.6V. So don&#39;t go feeding it 5V! If you&#39;ve got a regular Arduino Uno, use the 3.3V header to supply power to the chip.</span></p>
+<h3 class="western">
+	Getting pressure and temperature readings</h3>
+<p>
+	Now that you&#39;ve got the gist of the sensor, let&#39;s play! In this example we&#39;ll use an Arduino to initialize the BMP085, collect its pressure and temperature data, and display it on the serial output. First off, you&#39;ll need to connect it to the Arduino like so:</p>
+<p style="text-align: center;">
+	<a href="http://www.sparkfun.com/tutorial/Barometric/Example1-sch.PNG" target="_blank"><img alt="Example wiring" src="http://www.sparkfun.com/tutorial/Barometric/Example1-sch.PNG" style="width: 499px; height: 329px;" /></a></p>
+<table align="center" border="1" cellpadding="1" cellspacing="1" style="width: 200px;">
+	<tbody>
+		<tr>
+			<td style="text-align: center;">
+				<strong>BMP085 Pin</strong></td>
+			<td style="text-align: center;">
+				<strong>Arduino Pin</strong></td>
+		</tr>
+		<tr>
+			<td style="text-align: center;">
+				VCC</td>
+			<td style="text-align: center;">
+				3.3V</td>
+		</tr>
+		<tr>
+			<td style="text-align: center;">
+				GND</td>
+			<td style="text-align: center;">
+				GND</td>
+		</tr>
+		<tr>
+			<td style="text-align: center;">
+				SCL</td>
+			<td style="text-align: center;">
+				A5</td>
+		</tr>
+		<tr>
+			<td style="text-align: center;">
+				SDA</td>
+			<td style="text-align: center;">
+				A4</td>
+		</tr>
+	</tbody>
+</table>
+<p align="LEFT">
+	For now, we&#39;re going to ignore XCLR and EOC, it&#39;s safe to just leave them unconnected.</p>
+<p align="LEFT">
+	Now let&#39;s get to the nitty-gritty Arduino code. You can download the code <a href="http://www.sparkfun.com/tutorial/Barometric/BMP085_Example_Code.pde">here</a>, or get ready to do some copy-pasta.</p>
+<p align="LEFT">
+	The first thing I like to do with digital sensors like this is make sure I can actually <strong>communicate</strong> with it. For many sensors this is half the battle. Let&#39;s first look at the functions used to read 8- and 16-bit values from the BMP085.</p>
+<div style="width: 500px; height: 300px; overflow: auto; background: none repeat scroll 0% 0% rgb(204, 204, 204); border: 2px outset black;">
+	<pre>
+	<span style="color: rgb(126, 126, 126);">// Put this line at the top of your program</span>
+#define&nbsp;BMP085_ADDRESS&nbsp;0x77&nbsp;&nbsp;<span style="color: rgb(126, 126, 126);">// I2C address of BMP085</span>
+
+<span style="color: rgb(126, 126, 126);">//&nbsp;Read&nbsp;1&nbsp;byte&nbsp;from&nbsp;the&nbsp;BMP085&nbsp;at&nbsp;&#39;address&#39;</span>
+<span style="color: rgb(204, 102, 0);">char</span> bmp085Read(<span style="color: rgb(204, 102, 0);">unsigned</span> <span style="color: rgb(204, 102, 0);">char</span> address)
+{
+&nbsp;&nbsp;<span style="color: rgb(204, 102, 0);">unsigned</span> <span style="color: rgb(204, 102, 0);">char</span> data;
+&nbsp;&nbsp;
+&nbsp;&nbsp;<span style="color: rgb(204, 102, 0);">Wire</span>.<span style="color: rgb(204, 102, 0);">beginTransmission</span>(BMP085_ADDRESS);
+&nbsp;&nbsp;<span style="color: rgb(204, 102, 0);">Wire</span>.<span style="color: rgb(204, 102, 0);">send</span>(address);
+&nbsp;&nbsp;<span style="color: rgb(204, 102, 0);">Wire</span>.<span style="color: rgb(204, 102, 0);">endTransmission</span>();
+&nbsp;&nbsp;
+&nbsp;&nbsp;<span style="color: rgb(204, 102, 0);">Wire</span>.<span style="color: rgb(204, 102, 0);">requestFrom</span>(BMP085_ADDRESS, 1);
+&nbsp;&nbsp;<span style="color: rgb(204, 102, 0);">while</span>(!<span style="color: rgb(204, 102, 0);">Wire</span>.<span style="color: rgb(204, 102, 0);">available</span>())
+&nbsp;&nbsp;&nbsp;&nbsp;;
+&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;<span style="color: rgb(204, 102, 0);">return</span> <span style="color: rgb(204, 102, 0);">Wire</span>.<span style="color: rgb(204, 102, 0);">receive</span>();
+}
+
+<span style="color: rgb(126, 126, 126);">//&nbsp;Read&nbsp;2&nbsp;bytes&nbsp;from&nbsp;the&nbsp;BMP085</span>
+<span style="color: rgb(126, 126, 126);">//&nbsp;First&nbsp;byte&nbsp;will&nbsp;be&nbsp;from&nbsp;&#39;address&#39;</span>
+<span style="color: rgb(126, 126, 126);">//&nbsp;Second&nbsp;byte&nbsp;will&nbsp;be&nbsp;from&nbsp;&#39;address&#39;+1</span>
+<span style="color: rgb(204, 102, 0);">int</span> bmp085ReadInt(<span style="color: rgb(204, 102, 0);">unsigned</span> <span style="color: rgb(204, 102, 0);">char</span> address)
+{
+&nbsp;&nbsp;<span style="color: rgb(204, 102, 0);">unsigned</span> <span style="color: rgb(204, 102, 0);">char</span> msb, lsb;
+&nbsp;&nbsp;
+&nbsp;&nbsp;<span style="color: rgb(204, 102, 0);">Wire</span>.<span style="color: rgb(204, 102, 0);">beginTransmission</span>(BMP085_ADDRESS);
+&nbsp;&nbsp;<span style="color: rgb(204, 102, 0);">Wire</span>.<span style="color: rgb(204, 102, 0);">send</span>(address);
+&nbsp;&nbsp;<span style="color: rgb(204, 102, 0);">Wire</span>.<span style="color: rgb(204, 102, 0);">endTransmission</span>();
+&nbsp;&nbsp;
+&nbsp;&nbsp;<span style="color: rgb(204, 102, 0);">Wire</span>.<span style="color: rgb(204, 102, 0);">requestFrom</span>(BMP085_ADDRESS, 2);
+&nbsp;&nbsp;<span style="color: rgb(204, 102, 0);">while</span>(<span style="color: rgb(204, 102, 0);">Wire</span>.<span style="color: rgb(204, 102, 0);">available</span>()&lt;2)
+&nbsp;&nbsp;&nbsp;&nbsp;;
+&nbsp;&nbsp;msb&nbsp;=&nbsp;<span style="color: rgb(204, 102, 0);">Wire</span>.<span style="color: rgb(204, 102, 0);">receive</span>();
+&nbsp;&nbsp;lsb&nbsp;=&nbsp;<span style="color: rgb(204, 102, 0);">Wire</span>.<span style="color: rgb(204, 102, 0);">receive</span>();
+&nbsp;&nbsp;
+&nbsp;&nbsp;<span style="color: rgb(204, 102, 0);">return</span> (<span style="color: rgb(204, 102, 0);">int</span>) msb&lt;&lt;8 | lsb;
+}
+
+</pre>
+</div>
+<p align="LEFT" style="font-style: normal;">
+	Now, if you&#39;ve glanced through the BMP085 datasheet, you may have noticed some very cryptic variables, and a lot of ugly math involving them. The BMP085 is calibrated in the factory, and left with a series of eleven 16-bit <strong>calibration coefficients</strong> stored in the device&#39;s EEPROM. These variables all play a small role in calculating the absolute pressure. They need to be read just once, at the start of the program, and stored for later use. We can use the I<sup>2</sup>C functions above to read and store each of the calibration coefficients. We&#39;ll stick all of this in the setup() function, so it&#39;ll be called just once at the start of the program.</p>
+<div style="width: 500px; height: 300px; overflow: auto; background: none repeat scroll 0% 0% rgb(204, 204, 204); border: 2px outset black;">
+	<pre>
+	<span style="color: rgb(126, 126, 126);">// This is the top of the program</span>
+#include&nbsp;&lt;<span style="color: rgb(204, 102, 0);">Wire</span>.h&gt;
+
+const&nbsp;<span style="color: rgb(204, 102, 0);">unsigned</span> <span style="color: rgb(204, 102, 0);">char</span> OSS = 0;  <span style="color: rgb(126, 126, 126);">// Oversampling Setting</span>
+
+<span style="color: rgb(126, 126, 126);">//&nbsp;Calibration&nbsp;values</span>
+<span style="color: rgb(204, 102, 0);">int</span> ac1;
+<span style="color: rgb(204, 102, 0);">int</span> ac2; 
+<span style="color: rgb(204, 102, 0);">int</span> ac3; 
+<span style="color: rgb(204, 102, 0);">unsigned</span> <span style="color: rgb(204, 102, 0);">int</span> ac4;
+<span style="color: rgb(204, 102, 0);">unsigned</span> <span style="color: rgb(204, 102, 0);">int</span> ac5;
+<span style="color: rgb(204, 102, 0);">unsigned</span> <span style="color: rgb(204, 102, 0);">int</span> ac6;
+<span style="color: rgb(204, 102, 0);">int</span> b1; 
+<span style="color: rgb(204, 102, 0);">int</span> b2;
+<span style="color: rgb(204, 102, 0);">int</span> mb;
+<span style="color: rgb(204, 102, 0);">int</span> mc;
+<span style="color: rgb(204, 102, 0);">int</span> md;
+
+<span style="color: rgb(126, 126, 126);">//&nbsp;b5&nbsp;is&nbsp;calculated&nbsp;in&nbsp;bmp085GetTemperature(...),&nbsp;this&nbsp;variable&nbsp;is&nbsp;also&nbsp;used&nbsp;in&nbsp;bmp085GetPressure(...)</span>
+<span style="color: rgb(126, 126, 126);">//&nbsp;so&nbsp;...Temperature(...)&nbsp;must&nbsp;be&nbsp;called&nbsp;before&nbsp;...Pressure(...).</span>
+<span style="color: rgb(204, 102, 0);">long</span> b5; 
+
+<span style="color: rgb(204, 102, 0);">short</span> temperature;
+<span style="color: rgb(204, 102, 0);">long</span> pressure;
+
+<span style="color: rgb(204, 102, 0);">void</span> <span style="color: rgb(204, 102, 0);"><b>setup</b></span>()
+{
+&nbsp;&nbsp;<span style="color: rgb(204, 102, 0);"><b>Serial</b></span>.<span style="color: rgb(204, 102, 0);">begin</span>(9600);
+&nbsp;&nbsp;<span style="color: rgb(204, 102, 0);">Wire</span>.<span style="color: rgb(204, 102, 0);">begin</span>();
+&nbsp;&nbsp;bmp085Calibration();
+}
+
+<span style="color: rgb(126, 126, 126);">//&nbsp;Stores&nbsp;all&nbsp;of&nbsp;the&nbsp;bmp085&#39;s&nbsp;calibration&nbsp;values&nbsp;into&nbsp;global&nbsp;variables</span>
+<span style="color: rgb(126, 126, 126);">//&nbsp;Calibration&nbsp;values&nbsp;are&nbsp;required&nbsp;to&nbsp;calculate&nbsp;temp&nbsp;and&nbsp;pressure</span>
+<span style="color: rgb(126, 126, 126);">//&nbsp;This&nbsp;function&nbsp;should&nbsp;be&nbsp;called&nbsp;at&nbsp;the&nbsp;beginning&nbsp;of&nbsp;the&nbsp;program</span>
+<span style="color: rgb(204, 102, 0);">void</span> bmp085Calibration()
+{
+&nbsp;&nbsp;ac1&nbsp;=&nbsp;bmp085ReadInt(0xAA);
+&nbsp;&nbsp;ac2&nbsp;=&nbsp;bmp085ReadInt(0xAC);
+&nbsp;&nbsp;ac3&nbsp;=&nbsp;bmp085ReadInt(0xAE);
+&nbsp;&nbsp;ac4&nbsp;=&nbsp;bmp085ReadInt(0xB0);
+&nbsp;&nbsp;ac5&nbsp;=&nbsp;bmp085ReadInt(0xB2);
+&nbsp;&nbsp;ac6&nbsp;=&nbsp;bmp085ReadInt(0xB4);
+&nbsp;&nbsp;b1&nbsp;=&nbsp;bmp085ReadInt(0xB6);
+&nbsp;&nbsp;b2&nbsp;=&nbsp;bmp085ReadInt(0xB8);
+&nbsp;&nbsp;mb&nbsp;=&nbsp;bmp085ReadInt(0xBA);
+&nbsp;&nbsp;mc&nbsp;=&nbsp;bmp085ReadInt(0xBC);
+&nbsp;&nbsp;md&nbsp;=&nbsp;bmp085ReadInt(0xBE);
+}
+
+</pre>
+</div>
+<p align="LEFT" style="font-style: normal;">
+	Once we&#39;ve read the calibration values, we just need two more variables in order to calculate temperature and pressure. &#39;ut&#39; and &#39;up&#39; are the <strong>uncompensated temperature</strong> and <strong>pressure </strong>values, they&#39;re our starting point for finding the actual temperature and pressure. Every time we want to measure temperature or pressure, we need to first find out what these values are. The uncompensated temperature value is an unsigned 16-bit (int) number while &#39;up&#39; is an unsigned 32-bit number (long).</p>
+<div style="width: 500px; height: 300px; overflow: auto; background: none repeat scroll 0% 0% rgb(204, 204, 204); border: 2px outset black;">
+	<pre>
+	<span style="color: rgb(126, 126, 126);">//&nbsp;Read&nbsp;the&nbsp;uncompensated&nbsp;temperature&nbsp;value</span>
+<span style="color: rgb(204, 102, 0);">unsigned</span> <span style="color: rgb(204, 102, 0);">int</span> bmp085ReadUT()
+{
+&nbsp;&nbsp;<span style="color: rgb(204, 102, 0);">unsigned</span> <span style="color: rgb(204, 102, 0);">int</span> ut;
+&nbsp;&nbsp;
+&nbsp;&nbsp;<span style="color: rgb(126, 126, 126);">// Write 0x2E into Register 0xF4</span>
+&nbsp;&nbsp;<span style="color: rgb(126, 126, 126);">// This requests a temperature reading</span>
+&nbsp;&nbsp;<span style="color: rgb(204, 102, 0);">Wire</span>.<span style="color: rgb(204, 102, 0);">beginTransmission</span>(BMP085_ADDRESS);
+&nbsp;&nbsp;<span style="color: rgb(204, 102, 0);">Wire</span>.<span style="color: rgb(204, 102, 0);">send</span>(0xF4);
+&nbsp;&nbsp;<span style="color: rgb(204, 102, 0);">Wire</span>.<span style="color: rgb(204, 102, 0);">send</span>(0x2E);
+&nbsp;&nbsp;<span style="color: rgb(204, 102, 0);">Wire</span>.<span style="color: rgb(204, 102, 0);">endTransmission</span>();
+&nbsp;&nbsp;
+&nbsp;&nbsp;<span style="color: rgb(126, 126, 126);">// Wait at least 4.5ms</span>
+&nbsp;&nbsp;<span style="color: rgb(204, 102, 0);">delay</span>(5);
+&nbsp;&nbsp;
+&nbsp;&nbsp;<span style="color: rgb(126, 126, 126);">// Read two bytes from registers 0xF6 and 0xF7</span>
+&nbsp;&nbsp;ut&nbsp;=&nbsp;bmp085ReadInt(0xF6);
+&nbsp;&nbsp;<span style="color: rgb(204, 102, 0);">return</span> ut;
+}
+
+<span style="color: rgb(126, 126, 126);">//&nbsp;Read&nbsp;the&nbsp;uncompensated&nbsp;pressure&nbsp;value</span>
+<span style="color: rgb(204, 102, 0);">unsigned</span> <span style="color: rgb(204, 102, 0);">long</span> bmp085ReadUP()
+{
+&nbsp;&nbsp;<span style="color: rgb(204, 102, 0);">unsigned</span> <span style="color: rgb(204, 102, 0);">char</span> msb, lsb, xlsb;
+&nbsp;&nbsp;<span style="color: rgb(204, 102, 0);">unsigned</span> <span style="color: rgb(204, 102, 0);">long</span> up = 0;
+&nbsp;&nbsp;
+&nbsp;&nbsp;<span style="color: rgb(126, 126, 126);">// Write 0x34+(OSS&lt;&lt;6) into register 0xF4</span>
+&nbsp;&nbsp;<span style="color: rgb(126, 126, 126);">// Request a pressure reading w/ oversampling setting</span>
+&nbsp;&nbsp;<span style="color: rgb(204, 102, 0);">Wire</span>.<span style="color: rgb(204, 102, 0);">beginTransmission</span>(BMP085_ADDRESS);
+&nbsp;&nbsp;<span style="color: rgb(204, 102, 0);">Wire</span>.<span style="color: rgb(204, 102, 0);">send</span>(0xF4);
+&nbsp;&nbsp;<span style="color: rgb(204, 102, 0);">Wire</span>.<span style="color: rgb(204, 102, 0);">send</span>(0x34 + (OSS&lt;&lt;6));
+&nbsp;&nbsp;<span style="color: rgb(204, 102, 0);">Wire</span>.<span style="color: rgb(204, 102, 0);">endTransmission</span>();
+&nbsp;&nbsp;
+&nbsp;&nbsp;<span style="color: rgb(126, 126, 126);">// Wait for conversion, delay time dependent on OSS</span>
+&nbsp;&nbsp;<span style="color: rgb(204, 102, 0);">delay</span>(2 + (3&lt;<oss));><oss));><span style="color: rgb(126, 126, 126);">// Read register 0xF6 (MSB), 0xF7 (LSB), and 0xF8 (XLSB)</span>
+&nbsp;&nbsp;<span style="color: rgb(204, 102, 0);">Wire</span>.<span style="color: rgb(204, 102, 0);">beginTransmission</span>(BMP085_ADDRESS);
+&nbsp;&nbsp;<span style="color: rgb(204, 102, 0);">Wire</span>.<span style="color: rgb(204, 102, 0);">send</span>(0xF6);
+&nbsp;&nbsp;<span style="color: rgb(204, 102, 0);">Wire</span>.<span style="color: rgb(204, 102, 0);">endTransmission</span>();
+&nbsp;&nbsp;<span style="color: rgb(204, 102, 0);">Wire</span>.<span style="color: rgb(204, 102, 0);">requestFrom</span>(BMP085_ADDRESS, 3);
+&nbsp;&nbsp;
+&nbsp;&nbsp;<span style="color: rgb(126, 126, 126);">// Wait for data to become available</span>
+&nbsp;&nbsp;<span style="color: rgb(204, 102, 0);">while</span>(<span style="color: rgb(204, 102, 0);">Wire</span>.<span style="color: rgb(204, 102, 0);">available</span>() &lt; 3)
+&nbsp;&nbsp;&nbsp;&nbsp;;
+&nbsp;&nbsp;msb&nbsp;=&nbsp;<span style="color: rgb(204, 102, 0);">Wire</span>.<span style="color: rgb(204, 102, 0);">receive</span>();
+&nbsp;&nbsp;lsb&nbsp;=&nbsp;<span style="color: rgb(204, 102, 0);">Wire</span>.<span style="color: rgb(204, 102, 0);">receive</span>();
+&nbsp;&nbsp;xlsb&nbsp;=&nbsp;<span style="color: rgb(204, 102, 0);">Wire</span>.<span style="color: rgb(204, 102, 0);">receive</span>();
+&nbsp;&nbsp;
+&nbsp;&nbsp;up&nbsp;=&nbsp;(((<span style="color: rgb(204, 102, 0);">unsigned</span> <span style="color: rgb(204, 102, 0);">long</span>) msb &lt;&lt; 16) | ((<span style="color: rgb(204, 102, 0);">unsigned</span> <span style="color: rgb(204, 102, 0);">long</span>) lsb &lt;&lt; 8) | (<span style="color: rgb(204, 102, 0);">unsigned</span> <span style="color: rgb(204, 102, 0);">long</span>) xlsb) &gt;&gt; (8-OSS);
+&nbsp;&nbsp;
+&nbsp;&nbsp;<span style="color: rgb(204, 102, 0);">return</span> up;
+}
+
+</oss));></oss));></pre>
+</div>
+<p align="LEFT" style="font-style: normal;">
+	In those two functions, we&#39;re delaying to give the BMP085 enough time to finish its readings. The time for the delay is specified as the maximum conversion time in the datasheet. If you wanted to make it a bit more robust, you could read the <strong>EOC </strong>pin. While the conversion is still running, EOC will read LOW. Once finished it will go HIGH.</p>
+<p align="LEFT" style="font-style: normal;">
+	Now that we have all the variables we need, we need one last function that takes care of the following for us:</p>
+<p style="font-style: normal; text-align: center;">
+	<a href="http://www.sparkfun.com/tutorial/Barometric/calculations.PNG" target="_blank"><img alt="Necessary calculations to find temperature and pressure" src="http://www.sparkfun.com/tutorial/Barometric/calculations.PNG" style="width: 250px; height: 379px;" /></a></p>
+<p align="LEFT">
+	<span style="font-style: normal;">Ugh. Calculating the temperature isn&#39;t so bad, but, just...ugh, those pressure calculations. A couple quick notes: dividing by 2</span><sup><span style="font-style: normal;">N </span></sup><span style="font-style: normal;">is the same thing as shifting a byte N bits to the right. Likewise, multiplying by 2</span><sup><span style="font-style: normal;">N</span></sup><span style="font-style: normal;">, is the same thing as shifting it N bits to the left. We also have to be careful not to overflow any of the variables, which means paying close attention to the order of operations, and doing a little typecasting.</span></p>
+<p align="LEFT">
+	<span style="font-style: normal;">Here&#39;s the two functions we need to <strong>calculate temperature</strong> and <strong>pressure</strong>. Note that the variable <em>b5</em>, which is calculated in the <em>bmp085GetTemperature() </em>function, is also required to calculate pressure. This means you&#39;ll have to call </span><span style="font-style: normal;"><em>bmp085GetTemperature()</em>, before calling <em>bmp085GetPressure()</em>.</span></p>
+<div style="width: 500px; height: 300px; overflow: auto; background: none repeat scroll 0% 0% rgb(204, 204, 204); border: 2px outset black;">
+	<pre>
+	<span style="color: rgb(126, 126, 126);">//&nbsp;Calculate&nbsp;temperature&nbsp;given&nbsp;ut.</span>
+<span style="color: rgb(126, 126, 126);">//&nbsp;Value&nbsp;returned&nbsp;will&nbsp;be&nbsp;in&nbsp;units&nbsp;of&nbsp;0.1&nbsp;deg&nbsp;C</span>
+<span style="color: rgb(204, 102, 0);">short</span> bmp085GetTemperature(<span style="color: rgb(204, 102, 0);">unsigned</span> <span style="color: rgb(204, 102, 0);">int</span> ut)
+{
+&nbsp;&nbsp;<span style="color: rgb(204, 102, 0);">long</span> x1, x2;
+&nbsp;&nbsp;
+&nbsp;&nbsp;x1&nbsp;=&nbsp;(((<span style="color: rgb(204, 102, 0);">long</span>)ut - (<span style="color: rgb(204, 102, 0);">long</span>)ac6)*(<span style="color: rgb(204, 102, 0);">long</span>)ac5) &gt;&gt; 15;
+&nbsp;&nbsp;x2&nbsp;=&nbsp;((<span style="color: rgb(204, 102, 0);">long</span>)mc &lt;&lt; 11)/(x1 + md);
+&nbsp;&nbsp;b5&nbsp;=&nbsp;x1&nbsp;+&nbsp;x2;
+
+&nbsp;&nbsp;<span style="color: rgb(204, 102, 0);">return</span> ((b5 + 8)&gt;&gt;4);  
+}
+
+<span style="color: rgb(126, 126, 126);">//&nbsp;Calculate&nbsp;pressure&nbsp;given&nbsp;up</span>
+<span style="color: rgb(126, 126, 126);">//&nbsp;calibration&nbsp;values&nbsp;must&nbsp;be&nbsp;known</span>
+<span style="color: rgb(126, 126, 126);">//&nbsp;b5&nbsp;is&nbsp;also&nbsp;required&nbsp;so&nbsp;bmp085GetTemperature(...)&nbsp;must&nbsp;be&nbsp;called&nbsp;first.</span>
+<span style="color: rgb(126, 126, 126);">//&nbsp;Value&nbsp;returned&nbsp;will&nbsp;be&nbsp;pressure&nbsp;in&nbsp;units&nbsp;of&nbsp;Pa.</span>
+<span style="color: rgb(204, 102, 0);">long</span> bmp085GetPressure(<span style="color: rgb(204, 102, 0);">unsigned</span> <span style="color: rgb(204, 102, 0);">long</span> up)
+{
+&nbsp;&nbsp;<span style="color: rgb(204, 102, 0);">long</span> x1, x2, x3, b3, b6, p;
+&nbsp;&nbsp;<span style="color: rgb(204, 102, 0);">unsigned</span> <span style="color: rgb(204, 102, 0);">long</span> b4, b7;
+&nbsp;&nbsp;
+&nbsp;&nbsp;b6&nbsp;=&nbsp;b5&nbsp;-&nbsp;4000;
+&nbsp;&nbsp;<span style="color: rgb(126, 126, 126);">// Calculate B3</span>
+&nbsp;&nbsp;x1&nbsp;=&nbsp;(b2&nbsp;*&nbsp;(b6&nbsp;*&nbsp;b6)&gt;&gt;12)&gt;&gt;11;
+&nbsp;&nbsp;x2&nbsp;=&nbsp;(ac2&nbsp;*&nbsp;b6)&gt;&gt;11;
+&nbsp;&nbsp;x3&nbsp;=&nbsp;x1&nbsp;+&nbsp;x2;
+&nbsp;&nbsp;b3&nbsp;=&nbsp;(((((<span style="color: rgb(204, 102, 0);">long</span>)ac1)*4 + x3)&lt;<oss)>&gt;2;
+&nbsp;&nbsp;
+&nbsp;&nbsp;<span style="color: rgb(126, 126, 126);">// Calculate B4</span>
+&nbsp;&nbsp;x1&nbsp;=&nbsp;(ac3&nbsp;*&nbsp;b6)&gt;&gt;13;
+&nbsp;&nbsp;x2&nbsp;=&nbsp;(b1&nbsp;*&nbsp;((b6&nbsp;*&nbsp;b6)&gt;&gt;12))&gt;&gt;16;
+&nbsp;&nbsp;x3&nbsp;=&nbsp;((x1&nbsp;+&nbsp;x2)&nbsp;+&nbsp;2)&gt;&gt;2;
+&nbsp;&nbsp;b4&nbsp;=&nbsp;(ac4&nbsp;*&nbsp;(<span style="color: rgb(204, 102, 0);">unsigned</span> <span style="color: rgb(204, 102, 0);">long</span>)(x3 + 32768))&gt;&gt;15;
+&nbsp;&nbsp;
+&nbsp;&nbsp;b7&nbsp;=&nbsp;((<span style="color: rgb(204, 102, 0);">unsigned</span> <span style="color: rgb(204, 102, 0);">long</span>)(up - b3) * (50000&gt;&gt;OSS));
+&nbsp;&nbsp;<span style="color: rgb(204, 102, 0);">if</span> (b7 &lt; 0x80000000)
+&nbsp;&nbsp;&nbsp;&nbsp;p&nbsp;=&nbsp;(b7&lt;&lt;1)/b4;
+&nbsp;&nbsp;<span style="color: rgb(204, 102, 0);">else</span>
+&nbsp;&nbsp;&nbsp;&nbsp;p&nbsp;=&nbsp;(b7/b4)&lt;&lt;1;
+&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;x1&nbsp;=&nbsp;(p&gt;&gt;8)&nbsp;*&nbsp;(p&gt;&gt;8);
+&nbsp;&nbsp;x1&nbsp;=&nbsp;(x1&nbsp;*&nbsp;3038)&gt;&gt;16;
+&nbsp;&nbsp;x2&nbsp;=&nbsp;(-7357&nbsp;*&nbsp;p)&gt;&gt;16;
+&nbsp;&nbsp;p&nbsp;+=&nbsp;(x1&nbsp;+&nbsp;x2&nbsp;+&nbsp;3791)&gt;&gt;4;
+&nbsp;&nbsp;
+&nbsp;&nbsp;<span style="color: rgb(204, 102, 0);">return</span> p;
+}
+
+</oss)></pre>
+</div>
+<p align="LEFT">
+	<span style="font-style: normal;">And finally, we need to write something into the main loop() function so that our program actually does something. Let&#39;s just calculate the temperature and pressure, and spit it out over a serial line.</span></p>
+<div style="width: 500px; height: 300px; overflow: auto; background: none repeat scroll 0% 0% rgb(204, 204, 204); border: 2px outset black;">
+	<pre>
+	<span style="color: rgb(204, 102, 0);">void</span> <span style="color: rgb(204, 102, 0);"><b>loop</b></span>()
+{
+&nbsp;&nbsp;temperature&nbsp;=&nbsp;bmp085GetTemperature(bmp085ReadUT());
+&nbsp;&nbsp;pressure&nbsp;=&nbsp;bmp085GetPressure(bmp085ReadUP());
+&nbsp;&nbsp;<span style="color: rgb(204, 102, 0);"><b>Serial</b></span>.<span style="color: rgb(204, 102, 0);">print</span>(<span style="color: rgb(0, 102, 153);">&quot;Temperature: &quot;</span>);
+&nbsp;&nbsp;<span style="color: rgb(204, 102, 0);"><b>Serial</b></span>.<span style="color: rgb(204, 102, 0);">print</span>(temperature, <span style="color: rgb(0, 102, 153);">DEC</span>);
+&nbsp;&nbsp;<span style="color: rgb(204, 102, 0);"><b>Serial</b></span>.<span style="color: rgb(204, 102, 0);">println</span>(<span style="color: rgb(0, 102, 153);">&quot; *0.1 deg C&quot;</span>);
+&nbsp;&nbsp;<span style="color: rgb(204, 102, 0);"><b>Serial</b></span>.<span style="color: rgb(204, 102, 0);">print</span>(<span style="color: rgb(0, 102, 153);">&quot;Pressure: &quot;</span>);
+&nbsp;&nbsp;<span style="color: rgb(204, 102, 0);"><b>Serial</b></span>.<span style="color: rgb(204, 102, 0);">print</span>(pressure, <span style="color: rgb(0, 102, 153);">DEC</span>);
+&nbsp;&nbsp;<span style="color: rgb(204, 102, 0);"><b>Serial</b></span>.<span style="color: rgb(204, 102, 0);">println</span>(<span style="color: rgb(0, 102, 153);">&quot; Pa&quot;</span>);
+&nbsp;&nbsp;<span style="color: rgb(204, 102, 0);"><b>Serial</b></span>.<span style="color: rgb(204, 102, 0);">println</span>();
+&nbsp;&nbsp;<span style="color: rgb(204, 102, 0);">delay</span>(1000);
+}
+
+</pre>
+</div>
+<p align="LEFT" style="font-style: normal;">
+	Send that over to your Arduino. Open up the serial monitor and check that the baud rate is set to 9600. Are you getting something reasonable? The data should be in units of 0.1&deg;C for the temperature, and Pa for pressure. Here in my office I&#39;m reading a comfy 258 (25.8&deg;C) for temperature, and a pressure of 83523 Pa. If your elevation is lower than Boulder&#39;s ~5200ft, the measured pressure should read higher. Average pressure for those of you at sea level should be about 101325 Pa.</p>
+<p align="LEFT" style="font-style: normal;">
+	If the program slows to a halt before printing any readings, that usually means something&#39;s hooked up incorrectly. Make sure you didn&#39;t swap SDA and SCL!</p>
+<p align="LEFT" style="font-style: normal;">
+	You may have noticed a few of the calculations take into account an oversampling setting, <em>OSS</em>. OSS selects which mode the BMP085 operates in, and can be set to either 0, 1, 2, or 3. OSS determines how many samples the BMP085 will take before it sends over its uncompensated pressure reading. With OSS set to 0, the BMP085 will consume the least current. Setting OSS to 3 increases resolution, as it samples pressure eight times before producing a reading, this comes at a cost of more power usage. If you want to change OSS, just set it accordingly at the top of the program. Try changing OSS to 3, does the data become more stable?</p>
+<p style="font-style: normal; text-align: center;">
+	<a href="http://www.sparkfun.com/tutorial/Barometric/OSS-values.PNG" target="_blank"><img alt="OSS setting meanings" src="http://www.sparkfun.com/tutorial/Barometric/OSS-values.PNG" style="width: 500px; height: 173px;" /></a></p>
+<h3 class="western">
+	Applying the data: Altimetry and Meteorology</h3>
+<p>
+	Knowing the pressure is all good fun, but what really matters is what we do with this shiny knowledge. As I mentioned above, pressure is most often used to either calculate altitude, or as an indicator of what the weather might be planning on doing. Let&#39;s make a altitude tracking weather forecaster!</p>
+<p>
+	We&#39;re really just one step away from calculating the altitude, all we need is the non-linear equation that converts pressure to altitude. This equation is conveniently in the BMP085&#39;s datasheet:</p>
+<p align="CENTER">
+	<a href="http://www.sparkfun.com/tutorial/Barometric/Altitude-Equation.PNG" target="_blank"><img alt="Equation to find altitude at a given pressure" src="http://www.sparkfun.com/tutorial/Barometric/Altitude-Equation.PNG" style="width: 250px; height: 86px;" /></a></p>
+<p align="LEFT" style="font-style: normal;">
+	p<sub>0</sub> is the <i>average</i> pressure at sea level 101325 Pa, and <i>p</i> is the pressure that we measured. Note that this equation gives you altitude in units of <em>meters</em>. So, after we calculate pressure in our code, we just need to add these lines to calculate and print out the altitude:</p>
+<div style="width: 500px; height: 300px; overflow: auto; background: none repeat scroll 0% 0% rgb(204, 204, 204); border: 2px outset black;">
+	<pre>
+	<span style="color: rgb(126, 126, 126);">//&nbsp;Add&nbsp;these&nbsp;to&nbsp;the&nbsp;top&nbsp;of&nbsp;your&nbsp;program</span>
+const&nbsp;<span style="color: rgb(204, 102, 0);">float</span> p0 = 101325;     <span style="color: rgb(126, 126, 126);">// Pressure at sea level (Pa)</span>
+<span style="color: rgb(204, 102, 0);">float</span> altitude;
+</pre>
+	<pre>
+	&nbsp;&nbsp;<span style="color: rgb(126, 126, 126);">// Add this into loop(), after you&#39;ve calculated the pressure</span>
+&nbsp;&nbsp;altitude&nbsp;=&nbsp;(<span style="color: rgb(204, 102, 0);">float</span>)44330 * (1 - pow(((<span style="color: rgb(204, 102, 0);">float</span>) pressure/p0), 0.190295));
+&nbsp;&nbsp;<span style="color: rgb(204, 102, 0);"><b>Serial</b></span>.<span style="color: rgb(204, 102, 0);">print</span>(<span style="color: rgb(0, 102, 153);">&quot;Altitude: &quot;</span>);
+&nbsp;&nbsp;<span style="color: rgb(204, 102, 0);"><b>Serial</b></span>.<span style="color: rgb(204, 102, 0);">print</span>(altitude, 2);
+&nbsp;&nbsp;<span style="color: rgb(204, 102, 0);"><b>Serial</b></span>.<span style="color: rgb(204, 102, 0);">println</span>(<span style="color: rgb(0, 102, 153);">&quot; m&quot;</span>);
+
+</pre>
+</div>
+<p align="LEFT" style="font-style: normal;">
+	The altitude that you calculate might be off a tad, as the pressure will vary depending on the weather. Google Earth says the altitude here at SparkFun is about 1580 m (5183 ft), while at the pressure I&#39;m measuring altitude calculates out to about 1600m (5249 ft). Close enough for <strike>government</strike> SparkFun work.</p>
+<p align="LEFT" style="font-style: normal;">
+	Now, let&#39;s add a little code to turn our Arduino into a simple weather forecaster. If our altitude is known, we can turn the above formula around to calculate expected pressure at a specific altitude.</p>
+<p align="CENTER">
+	<a href="http://www.sparkfun.com/tutorial/Barometric/pressure-equation.PNG" target="_blank"><img alt="Formula to find expected pressure at a given altitude" src="http://www.sparkfun.com/tutorial/Barometric/pressure-equation.PNG" style="width: 250px; height: 68px;" /></a></p>
+<p align="LEFT" style="font-style: normal;">
+	You can use Google Earth, <a href="http://www.daftlogic.com/sandbox-google-maps-find-altitude.htm" target="_blank">this</a> website, or even a GPS module to find your altitude.</p>
+<p align="LEFT" style="font-style: normal;">
+	If your measured pressure is about equal to the expected pressure at your altitude, weather will probably be fair, if somewhat cloudy. Typically anything over about 250 Pa of the expected pressure will result in awesome, sunny weather, while anything 250 Pa below means rainy/snowy weather. Knowing all of that, here&#39;s some quick code to implement a simple weather forecaster:</p>
+<div style="width: 500px; height: 300px; overflow: auto; background: none repeat scroll 0% 0% rgb(204, 204, 204); border: 2px outset black;">
+	<pre>
+	<span style="color: rgb(126, 126, 126);">//&nbsp;Add&nbsp;these&nbsp;to&nbsp;the&nbsp;top&nbsp;of&nbsp;your&nbsp;program</span>
+const&nbsp;<span style="color: rgb(204, 102, 0);">float</span> currentAltitude = 1580.08; <span style="color: rgb(126, 126, 126);">// current altitude in METERS</span>
+const&nbsp;<span style="color: rgb(204, 102, 0);">float</span> ePressure = p0 * pow((1-currentAltitude/44330), 5.255);  <span style="color: rgb(126, 126, 126);">// expected pressure (in Pa) at altitude</span>
+<span style="color: rgb(204, 102, 0);">float</span> weatherDiff;
+
+&nbsp; <span style="color: rgb(126, 126, 126);">// Add this into loop(), after you&#39;ve calculated the pressure</span>
+&nbsp;&nbsp;weatherDiff&nbsp;=&nbsp;pressure&nbsp;-&nbsp;ePressure;
+&nbsp;&nbsp;<span style="color: rgb(204, 102, 0);">if</span>(weatherDiff &gt; 250)
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: rgb(204, 102, 0);"><b>Serial</b></span>.<span style="color: rgb(204, 102, 0);">println</span>(<span style="color: rgb(0, 102, 153);">&quot;Sunny!&quot;</span>);
+&nbsp;&nbsp;<span style="color: rgb(204, 102, 0);">else</span> <span style="color: rgb(204, 102, 0);">if</span> ((weatherDiff &lt;= 250) || (weatherDiff &gt;= -250))
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: rgb(204, 102, 0);"><b>Serial</b></span>.<span style="color: rgb(204, 102, 0);">println</span>(<span style="color: rgb(0, 102, 153);">&quot;Partly Cloudy&quot;</span>);
+&nbsp;&nbsp;<span style="color: rgb(204, 102, 0);">else</span> <span style="color: rgb(204, 102, 0);">if</span> (weatherDiff &gt; -250)
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: rgb(204, 102, 0);"><b>Serial</b></span>.<span style="color: rgb(204, 102, 0);">println</span>(<span style="color: rgb(0, 102, 153);">&quot;Rain :-(&quot;</span>);
+&nbsp;&nbsp;<span style="color: rgb(204, 102, 0);"><b>Serial</b></span>.<span style="color: rgb(204, 102, 0);">println</span>();
+
+</pre>
+</div>
+<p align="LEFT">
+	<span style="font-style: normal;">I&#39;ll stress that this is very </span><i>simple</i><span style="font-style: normal;">. To get a better idea of what the weather&#39;s going to do, you need to look at how pressure is changing over time. Measuring the rate of change of pressure, you can get a much better idea of what the weather is going to do. For example, pressure changes of more than about -250 Pa per hour (Pa/h), result in unstable weather patterns like thunderstorms, while lower rates, between -50 and -250 Pa/h produce stable, though still rainy weather. Now that you know how to use the BMP085, maybe you can program your Arduino to out-forecast your local weatherman!</span></p></div>
+
+<div id=comments_container>
+  
+<h2 id="comments_header" class="collapsible grey big">
+  <span class="arrow"></span>Comments
+  <span class="count">
+    8 comments     <a href="http://www.sparkfun.com/tutorials/253/comments.rss"><img src="http://dlnmh9ip6v2uc.cloudfront.net/images/framework/rss.gif" style="vertical-align: top; margin-top: -1px;" /></a>  </span>
+</h2>
+<div id="comments" class="collapsible white">
+  <div>  <div class="login">
+    <b><a href="#" onclick="javascript: $('right').scrollTo(); $('user_login').select()">Login</a> to post comments.</b>
+  </div>
+</div>
+  <div id="comment-reply-form" style="display: none">  <div style="text-align: center">
+    <b><a href="#" onclick="javascript: $('right').scrollTo(); $('user_login').select()">Login</a> to post comments.</b>
+  </div>
+</div>
+  <div id="comment-edit-form" style="display: none">  <div style="text-align: center">
+    <b><a href="#" onclick="javascript: $('right').scrollTo(); $('user_login').select()">Login</a> to edit comments.</b>
+  </div>
+</div>
+  <ul class=comments>
+    <li id="comment-4eaad851757b7fd3510086c9" class=" comment">
+<div class="clearfix tagline">
+  <div class="comment-info">
+    <img class="avatar" src="https://static.sparkfun.com/avatar/5974b897dc88919819ba7bebc83f957d?d=retro&s=30&r=pg" />            <a href="http://www.sparkfun.com/users/74816">Microzoul</a>
+    <span class="wide">|</span>
+    <span title="Tuesday, 12-Apr-11 07:57:39 MDT" class=date><a href="http://www.sparkfun.com/tutorials/253#comment-4eaad851757b7fd3510086c9">about 9 months ago</a></span>
+        <span class="rating-star">
+          <span title="Please login to up-vote comments" class=star-dark> </span>
+        </span>
+    <span class="rating" id="comment-rating-4eaad851757b7fd3510086c9">
+      <a data="fancybox" href="http://www.sparkfun.com/static/comment_help">1</a>
+    </span>
+  </div>
+  <div class="actions">
+      </div>
+</div>
+<div class="comment-text">
+  <p>what this line means<br/>
+b3 = (((((long)ac1)*4 + x3)2;<br/>
+is it possible way to calculate altitude  directly from UP value without calibration overhead<br/>
+thank you</p></div>
+</li><li id="comment-4eaad852757b7fd3510090d0" class=" comment">
+<div class="clearfix tagline">
+  <div class="comment-info">
+    <img class="avatar" src="http://dlnmh9ip6v2uc.cloudfront.net/images/framework/anon.png" />            <a href="http://www.sparkfun.com/users/225428">bloater</a>
+    <span class="wide">|</span>
+    <span title="Friday, 13-May-11 15:08:59 MDT" class=date><a href="http://www.sparkfun.com/tutorials/253#comment-4eaad852757b7fd3510090d0">about 8 months ago</a></span>
+        <span class="rating-star">
+          <span title="Please login to up-vote comments" class=star-dark> </span>
+        </span>
+    <span class="rating" id="comment-rating-4eaad852757b7fd3510090d0">
+      <a data="fancybox" href="http://www.sparkfun.com/static/comment_help">1</a>
+    </span>
+  </div>
+  <div class="actions">
+      </div>
+</div>
+<div class="comment-text">
+  <p>Excellent tutorial Jimbo &ndash; thanks ;)<br/>
+What&rsquo;s your opinion on using i2c pullups connected to 5V with a 3V3 part such as the BMP085?  Presumably this is out of spec and may stress the part.  I went to the trouble of tweaking the Arduino &lsquo;Wire&rsquo; library to avoid enabling the AVR pullups (it&rsquo;s a shame this is not an option in the library).<br/>
+&ndash; Bernard ;)</p></div>
+</li><li id="comment-4eaad854757b7fd3510098fb" class=" comment">
+<div class="clearfix tagline">
+  <div class="comment-info">
+    <img class="avatar" src="http://dlnmh9ip6v2uc.cloudfront.net/images/framework/anon.png" />            <a href="http://www.sparkfun.com/users/27113">Keebler</a>
+    <span class="wide">|</span>
+    <span title="Tuesday, 07-Jun-11 09:30:59 MDT" class=date><a href="http://www.sparkfun.com/tutorials/253#comment-4eaad854757b7fd3510098fb">about 7 months ago</a></span>
+        <span class="rating-star">
+          <span title="Please login to up-vote comments" class=star-dark> </span>
+        </span>
+    <span class="rating" id="comment-rating-4eaad854757b7fd3510098fb">
+      <a data="fancybox" href="http://www.sparkfun.com/static/comment_help">1</a>
+    </span>
+  </div>
+  <div class="actions">
+      </div>
+</div>
+<div class="comment-text">
+  <p>Great tutorial&hellip; I&rsquo;m concerned that the diagram has 5v SDA and SCL lines going to a 3.3v part  without a logic level shifter.  I don&rsquo;t doubt it will work but won&rsquo;t reduce the life of the part and could this affect accuracy?<br/>
+Also, is there a way to disable the code &ldquo;scroll view&rdquo; windows?  They don&rsquo;t print well (at all)&hellip; anyone know a workaround?  Thanks!</p></div>
+</li><li id="comment-4eaad857757b7fd35100ae20" class=" comment">
+<div class="clearfix tagline">
+  <div class="comment-info">
+    <img class="avatar" src="http://dlnmh9ip6v2uc.cloudfront.net/images/framework/anon.png" />            <a href="http://www.sparkfun.com/users/240917">Avi8tor857</a>
+    <span class="wide">|</span>
+    <span title="Wednesday, 17-Aug-11 09:50:22 MDT" class=date><a href="http://www.sparkfun.com/tutorials/253#comment-4eaad857757b7fd35100ae20">about 4 months ago</a></span>
+     *    <span class="rating-star">
+          <span title="Please login to up-vote comments" class=star-dark> </span>
+        </span>
+    <span class="rating" id="comment-rating-4eaad857757b7fd35100ae20">
+      <a data="fancybox" href="http://www.sparkfun.com/static/comment_help">1</a>
+    </span>
+  </div>
+  <div class="actions">
+      </div>
+</div>
+<div class="comment-text">
+  <p>Has anyone gotten this to work with the mega 2560, if so which pins are you using I tried mapping it with SDA-A4 and SCL-A5, but I can&rsquo;t get the code to get past while(Wire.available() and available() is always empty.</p></div>
+</li><li id="comment-4eaad857757b7fd35100ae66" class=" comment">
+<div class="clearfix tagline">
+  <div class="comment-info">
+    <img class="avatar" src="http://dlnmh9ip6v2uc.cloudfront.net/images/framework/anon.png" />            <a href="http://www.sparkfun.com/users/240917">Avi8tor857</a>
+    <span class="wide">|</span>
+    <span title="Wednesday, 17-Aug-11 20:58:58 MDT" class=date><a href="http://www.sparkfun.com/tutorials/253#comment-4eaad857757b7fd35100ae66">about 4 months ago</a></span>
+        <span class="rating-star">
+          <span title="Please login to up-vote comments" class=star-dark> </span>
+        </span>
+    <span class="rating" id="comment-rating-4eaad857757b7fd35100ae66">
+      <a data="fancybox" href="http://www.sparkfun.com/static/comment_help">1</a>
+    </span>
+  </div>
+  <div class="actions">
+      </div>
+</div>
+<div class="comment-text">
+  <p>The instructions says to use pins A4 and A5 but on the Ardunio mega 2560 you have to use pins 20 (SDA) and 21 (SCL).</p></div>
+</li><li id="comment-4eaad857757b7fd35100ae69" class=" comment">
+<div class="clearfix tagline">
+  <div class="comment-info">
+    <img class="avatar" src="http://dlnmh9ip6v2uc.cloudfront.net/images/framework/anon.png" />            <a href="http://www.sparkfun.com/users/240917">Avi8tor857</a>
+    <span class="wide">|</span>
+    <span title="Wednesday, 17-Aug-11 21:26:32 MDT" class=date><a href="http://www.sparkfun.com/tutorials/253#comment-4eaad857757b7fd35100ae69">about 4 months ago</a></span>
+        <span class="rating-star">
+          <span title="Please login to up-vote comments" class=star-dark> </span>
+        </span>
+    <span class="rating" id="comment-rating-4eaad857757b7fd35100ae69">
+      <a data="fancybox" href="http://www.sparkfun.com/static/comment_help">1</a>
+    </span>
+  </div>
+  <div class="actions">
+      </div>
+</div>
+<div class="comment-text">
+  <p>One other thing with the altitude calculation it is using standard pressure p0.  So you are getting standard altitude, not true altitude.  Pilots use standard altitude at high altitudes as a standard, but small airplanes flying lower use true altitude with the altimeter adjusted to the pressure as reported by the closes station.</p></div>
+</li><li id="comment-4eaad857757b7fd35100af3c" class=" comment">
+<div class="clearfix tagline">
+  <div class="comment-info">
+    <img class="avatar" src="http://dlnmh9ip6v2uc.cloudfront.net/images/framework/anon.png" />            <a href="http://www.sparkfun.com/users/240917">Avi8tor857</a>
+    <span class="wide">|</span>
+    <span title="Saturday, 20-Aug-11 11:54:55 MDT" class=date><a href="http://www.sparkfun.com/tutorials/253#comment-4eaad857757b7fd35100af3c">about 4 months ago</a></span>
+     *    <span class="rating-star">
+          <span title="Please login to up-vote comments" class=star-dark> </span>
+        </span>
+    <span class="rating" id="comment-rating-4eaad857757b7fd35100af3c">
+      <a data="fancybox" href="http://www.sparkfun.com/static/comment_help">1</a>
+    </span>
+  </div>
+  <div class="actions">
+      </div>
+</div>
+<div class="comment-text">
+  <p>For those that want to do an altimeter that closely mimics a real aircraft here is the steps to go along with what is provided here.<br/>
+First we are getting the barometric pressure in pascals, and in Aviation most measurements are in inHG.<br/>
+float pressInHG = pressure/3386.389; //convert pa to inHG<br/>
+Secondly this measures very minute changes and when flying you don&rsquo;t want you altemeter jumping around that much so we limit the accuracy some.<br/>
+  pressInHG = ((int)(pressInHG<em>100))/100.0; //round to two dec places<br/>
+Now we look up the current altememter setting for our area.  The easiest and most current is the METAR data from the closest airport.  The trouble you have there is getting the ICAO for the airport.  For example the closest airport to me is Peachtree Dekab Airport or kpdk.<br/>
+This will help you find the ICAO.<br/>
+ http://www.airlinecodes.co.uk/aptcodesearch.asp<br/>
+This will get you the METAR<br/>
+ http://weather.noaa.gov/weather/metar.shtml<br/>
+This will teach you to decode the METAR<br/>
+http://www.wunderground.com/metarFAQ.asp<br/>
+but basically look for something like &ldquo;A2995&rdquo; which gives you the altimeter setting of 29.95 inHG<br/>
+  float AS = 20.95;//this will need to be updated regularly to get accurate readings.<br/>
+Then we calculate the altitude.<br/>
+  float altitude = (pow(AS,0.1903) &ndash; pow(pressInHG,(1/5.255)))/(1.212</em>(pow(10,-5))); //calculate altitude<br/>
+Here is my reference<br/>
+ http://wahiduddin.net/calc/density_altitude.htm<br/>
+I get readings within 50ft of my GPS, usually within 15ft.</p></div>
+</li><li id="comment-4eaad858757b7fd35100b42e" class=" comment">
+<div class="clearfix tagline">
+  <div class="comment-info">
+    <img class="avatar" src="https://static.sparkfun.com/avatar/4dca69c386d2849723f48af6aa0f654e?d=retro&s=30&r=pg" />            <a href="http://www.sparkfun.com/users/245701">jamesotron</a>
+    <span class="wide">|</span>
+    <span title="Monday, 12-Sep-11 22:15:34 MDT" class=date><a href="http://www.sparkfun.com/tutorials/253#comment-4eaad858757b7fd35100b42e">about 3 months ago</a></span>
+        <span class="rating-star">
+          <span title="Please login to up-vote comments" class=star-dark> </span>
+        </span>
+    <span class="rating" id="comment-rating-4eaad858757b7fd35100b42e">
+      <a data="fancybox" href="http://www.sparkfun.com/static/comment_help">1</a>
+    </span>
+  </div>
+  <div class="actions">
+      </div>
+</div>
+<div class="comment-text">
+  <p>What happens to the I2C address of the sensor if you want to have two (say one on the inside and one on the outside of a vacuum chamber)? I guess I could simply isolate them and only read one at a time? Bit nasty though.</p></div>
+</li>  </ul>
+</div>
+<br />
+
+</div>
+      </div>
+    </div>
+
+    <div id="footer">
+      SparkFun Electronics <a href="http://www.sparkfun.com/news/300">&reg;</a>      <span class="wide">|</span>
+      <a href="http://maps.google.com/maps?f=q&source=s_q&hl=en&geocode=&q=6175+Longbow+Dr,+Boulder,+CO+80301&sll=40.006234,-105.224915&sspn=0.012113,0.020192&ie=UTF8&hq=&hnear=6175+Longbow+Dr,+Boulder,+Colorado+80301&t=h&z=16">Boulder, Colorado</a>
+      <span class="wide">|</span>
+      <a href="http://www.sparkfun.com/static/customer_service">Customer Service</a>
+    </div>
+        <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-3404365-1']);
+      _gaq.push(['_trackPageview']);
+      _gaq.push(['_trackPageLoadTime']);
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+      </body>
+</html>

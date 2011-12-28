@@ -1,0 +1,35 @@
+Working Arduino library:
+
+https://github.com/nethoncho/Arduino-DHT22
+RHT03 is another name for DHT22
+
+-------------------------------------------------------------------------------
+
+I was using NetHoncho's library, and was getting only maybe one out of ten
+readings correct. The rest were sync timeout errors. I modified his library to
+retry up to 70 times instead of 35 times, and that did the trick. Look for this
+line in his lib:
+(CTRL+F "start of the sync pulse")
+
+    if (retryCount > 35) //(Spec is 50 us, 352 == 70 us)
+
+and change it to this:
+
+    if (retryCount > 70) //(Spec is 50 us, 352 == 70 us)
+
+Thanks for the lib NetHoncho! Works great now.
+
+NOTE: The device is not addressable either, so it needs its own pin.
+
+-------------------------------------------------------------------------------
+
+http://sheepdogguides.com/arduino/ar3ne1humDHT11.htm
+CTRL+F "Operating Environment"
+
+Code is likely useless, but discussion seems valid.
+
+-------------------------------------------------------------------------------
+
+If you run into miscellaneous problems with the sensor, see the extremely long
+comment thread at Sparkfun (most are resolved, and the data sheet author
+Thomas Liu participates.)
