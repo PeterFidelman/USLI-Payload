@@ -4,6 +4,7 @@ What is included:
     README          - This file
     USLIPayload.ino - Main driver program
     libraries/      - Functions to interface with payload's sensors.
+    prototypes/     - Experimental code that isn't working properly yet.
 
 Downloading a copy:
     1: Check out a copy of the source.
