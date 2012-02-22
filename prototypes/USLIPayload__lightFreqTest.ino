@@ -18,7 +18,7 @@
 unsigned long initTime;
 
 // replace syntax
-#define PORT 22
+#define PORT 26  // so as not to conflict with I2C
 
 void setup() {
   Serial.begin(9600);
