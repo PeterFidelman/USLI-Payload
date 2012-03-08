@@ -1,17 +1,16 @@
-/* TempHumidity.h - Library for interfacing with Maxdetect RHT03
- * Created by the University of Washington USLI Team, 2010-2011
- * Released into the public domain - use at your own risk!
- */
+// File: TempHumidity.h
 
-#ifndef TempHumidity_h
-#define TempHumidity_h
+#include <DHT22.h>
+#include <Scheduler.h>
 
-#include "Arduino.h"
+class TempHumidity : public ITask
+{
+    public: void setup();
+            void run(Scheduler *);
+            TempHumidity(int, int);
 
-class TempHumidity {
-    public:
-        TempHumidity();
-    private:
+    private: int port;
+             int interval;
+             DHT22* myDHT22;
+
 };
-
-#endif

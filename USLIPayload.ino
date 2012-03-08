@@ -8,65 +8,54 @@
 #include <Camera.h>
 #include <GPS.h>
 #include <LightIntensity.h>
-#include <Pressure.h>
 #include <TempHumidity.h>
+#include <Pressure.h>
 #include <Xbee.h>
 
 #include <digitalWriteFast.h>
 #include <DHT22.h>
+#include <Wire.h>
+#include <Scheduler.h>
 
-unsigned long initTime;
-
-// replace syntax
-#define TSL235R_PORT 21
+// Ports
 #define DHT22_PORT 22
+//DHT22 uses I2C and Wire
+#define TSL235_PORT 26   // unused: set in LightIntensity.c
 
-DHT22 myDHT22(DHT22_PORT);
+// Polling frequencies
+#define DHT22_INTERVAL_MS 3000
+#define BMP085_INTERVAL_MS 1000 
+#define TSL235_INTERVAL_MS 250
+
+// Create a task scheduler singleton
+Scheduler __scheduler;
+
+// Set up interrupt
+ISR(TIMER2_OVF_vect) {
+  RESET_TIMER2;
+  __scheduler.__ulCounter++;    
+}
+
+// Instantiate tasks
+TempHumidity _tempHumidity(DHT22_PORT, DHT22_INTERVAL_MS);
+Pressure _pressure(BMP085_INTERVAL_MS);
+LightIntensity _lightIntensity(TSL235_PORT, TSL235_INTERVAL_MS);
 
 void setup() {
-  Serial.begin(9600);
-  Serial.println("Hello, world!"); 
+    // Prepare tasks
+    _tempHumidity.setup();
+    //_pressure.setup();  // TODO: Solder, re-add
+    _lightIntensity.setup();
+    
+    // Start the scheduler
+    __scheduler.setup();
+    
+    // Start each task
+    __scheduler.queue(&_tempHumidity);
+    //__scheduler.queue(&_pressure);  // TODO: Solder, re-add
+    __scheduler.queue(&_lightIntensity);
 }
 
 void loop() {  
-  DHT22_ERROR_t errorCode;
-
-  delay(2000);
-  Serial.print("Requesting data...");
-  errorCode = myDHT22.readData();
-  switch(errorCode)
-  {
-    case DHT_ERROR_NONE:
-      Serial.print("Got Data ");
-      Serial.print(myDHT22.getTemperatureC());
-      Serial.print("C ");
-      Serial.print(myDHT22.getHumidity());
-      Serial.println("%");
-      break;
-    case DHT_ERROR_CHECKSUM:
-      Serial.print("check sum error ");
-      Serial.print(myDHT22.getTemperatureC());
-      Serial.print("C ");
-      Serial.print(myDHT22.getHumidity());
-      Serial.println("%");
-      break;
-    case DHT_BUS_HUNG:
-      Serial.println("BUS Hung ");
-      break;
-    case DHT_ERROR_NOT_PRESENT:
-      Serial.println("Not Present ");
-      break;
-    case DHT_ERROR_ACK_TOO_LONG:
-      Serial.println("ACK time out ");
-      break;
-    case DHT_ERROR_SYNC_TIMEOUT:
-      Serial.println("Sync Timeout ");
-      break;
-    case DHT_ERROR_DATA_TIMEOUT:
-      Serial.println("Data Timeout ");
-      break;
-    case DHT_ERROR_TOOQUICK:
-      Serial.println("Polled to quick ");
-      break;
-  }
+    __scheduler.processMessages();
 }
