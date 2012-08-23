@@ -1,24 +1,25 @@
-/* GPS.h - Library for interfacing with Locosys LS2003x-series GPS receiver
+/* Xbee.h - Library for interfacing with XBee-PRO XSC RF Module
  * Created by the University of Washington USLI Team, 2010-2011
  * Released into the public domain - use at your own risk!
  */
 
-#ifndef GPS_h
-#define GPS_h
+#ifndef UV_h
+#define UV_h
 
+#include "Arduino.h"
 #include <Scheduler.h>
 #include <SD.h>
-#include "Arduino.h"
 
-class GPS : public ITask
-{
+class UV : public ITask{
     public:
         void setup();
         void run(Scheduler *);
-        GPS(int);
+        void set_interval(Scheduler *, int);
+        UV(int, int);
     private:
-        File logFile_GPS;
+        File logFile_UV;
         int interval;
+        int port;
 };
 
 #endif

@@ -2,7 +2,6 @@
 
 #include <DHT22.h>
 #include <Scheduler.h>
-#include <SD.h>
 
 class TempHumidity : public ITask
 {
@@ -11,7 +10,6 @@ class TempHumidity : public ITask
             TempHumidity(int, int);
 
     private: int port;
-             int interval;
              DHT22* myDHT22;
 
 };

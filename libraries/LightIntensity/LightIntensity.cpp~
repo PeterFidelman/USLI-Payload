@@ -2,7 +2,6 @@
 
 #include "Arduino.h"
 #include "LightIntensity.h"
-#include<SD.h>
 
 #define PORT 26
 //#define PORT port
@@ -69,11 +68,8 @@ boolean fakeMorse_helper(unsigned param)
 }
 
 // TODO crime against humanity ends here -----------------------------
-
-File logFile_LI;
-
 void LightIntensity::setup() {
-    Serial1.begin(9600);
+    Serial.begin(9600);
 
     pinMode(PORT, INPUT);
 
@@ -86,9 +82,6 @@ void LightIntensity::setup() {
 
 void LightIntensity::run(Scheduler * scheduler) {
     scheduler -> schedule(this, interval);
-
-    // SD - open file anew
-    logFile_LI = SD.open("LIGHTINT.LOG", FILE_WRITE);
 
     // Find average of NUM_SAMPLES successive reads
     long totTime = 0;
@@ -127,21 +120,15 @@ void LightIntensity::run(Scheduler * scheduler) {
     int pulseLength = totTime / NUM_SAMPLES;
 
     if(useMorse) {
-        beep(50000, 50);
+        beep(50000, 100);
         fakeMorse((unsigned) pulseLength);
-        beep(50000, 50);
+        beep(50000, 100);
     } else {
-        Serial1.print("TSL235>>");
-        logFile_LI.print("TSL235>>");   // SD
-        Serial1.print(" ");
-        logFile_LI.print(" ");   // SD
-        Serial1.print(millis());
-        logFile_LI.print(millis());   // SD
-        Serial1.print(" ");
-        logFile_LI.print(" ");   // SD
-        Serial1.println(pulseLength);
-        logFile_LI.println(pulseLength);   // SD
+        Serial.print("TSL235>>");
+        Serial.print(" ");
+        Serial.print(millis());
+        Serial.print(" ");
+        Serial.println(pulseLength);
     }
-    logFile_LI.close();  // SD - close file to ensure data is written
 }
 

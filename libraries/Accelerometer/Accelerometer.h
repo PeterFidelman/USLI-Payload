@@ -6,12 +6,25 @@
 #ifndef Accelerometer_h
 #define Accelerometer_h
 
+#include <Scheduler.h>
+#include <SD.h>
 #include "Arduino.h"
 
-class Accelerometer {
+#include <BMA180.h>
+#include <Wire.h>
+
+class Accelerometer : public ITask
+{
     public:
-        Accelerometer();
+        void setup();
+        void run(Scheduler *);
+        float readMagnitudeAccel(void); 
+        Accelerometer(int);
+        BMA180 bma;     // made this public
     private:
+        File logFile_AC;
+        int interval;
+        void printFloat(float, int);
 };
 
 #endif

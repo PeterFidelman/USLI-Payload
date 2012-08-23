@@ -5,7 +5,6 @@
 
 #include <digitalWriteFast.h>
 #include <Scheduler.h>
-#include <SD.h>
 
 class LightIntensity : public ITask
 {
@@ -16,7 +15,7 @@ class LightIntensity : public ITask
     private:
         int port;
         int interval;
-        boolean useMorse;
+        boolean morse;
 };
 
 #endif

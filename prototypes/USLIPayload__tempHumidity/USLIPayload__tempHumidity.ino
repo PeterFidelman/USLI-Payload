@@ -4,13 +4,13 @@
  * Released into the public domain - use at your own risk!
  */
 
-#include <Accelerometer.h>
-#include <Camera.h>
-#include <GPS.h>
-#include <LightIntensity.h>
-#include <Pressure.h>
-#include <TempHumidity.h>
-#include <Xbee.h>
+//#include <Accelerometer.h>
+//#include <Camera.h>
+//#include <GPS.h>
+//#include <LightIntensity.h>
+//#include <Pressure.h>
+//#include <TempHumidity.h>
+//#include <Xbee.h>
 
 #include <digitalWriteFast.h>
 #include <DHT22.h>

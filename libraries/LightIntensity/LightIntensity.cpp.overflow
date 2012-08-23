@@ -1,0 +1,53 @@
+// File: LightIntensity.cpp
+
+#include "Arduino.h"
+#include "LightIntensity.h"
+
+#define PORT 26
+//#define PORT port
+
+// 100 ms polling period
+#define PERIOD 1000*100
+
+LightIntensity::LightIntensity(int p, int i_ms) {
+    port = p;
+    interval = i_ms;
+}
+
+void LightIntensity::setup() {
+    Serial.begin(9600);
+    pinMode(PORT, INPUT);
+
+    TCCR1A = 0;     // Force 16-bit timer mode
+    //TCCR1B = 1;   // no prescaling
+    TCCR1B = 2;     // 8x prescaling
+}
+
+void LightIntensity::run(Scheduler * scheduler) {
+    scheduler -> schedule(this, interval);
+
+    // Find average of NUM_SAMPLES successive reads
+    long transitions = 0;
+
+    int startPulse = TCNT1;
+    while(TCNT1 - startPulse < PERIOD) {     // 1000 us = 1 ms
+        // wait for start of next low->hi transition
+        while(digitalReadFast(PORT) == LOW) {
+        }
+        
+        // transition occurs now
+        transitions++;
+
+        // wait for end of next pulse
+        while(digitalReadFast(PORT) == HIGH) {
+        }
+    }
+    int pulseLength = (TCNT1 - startPulse);
+
+    Serial.print("TSL235>>");
+    Serial.print(" ");
+    Serial.print(millis());
+    Serial.print(" ");
+    Serial.println(pulseLength);
+}
+

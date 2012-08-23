@@ -22,8 +22,6 @@
 #include <Wire.h>
 #include <Scheduler.h>
 
-#include <math.h>
-
 // Ports
 #define DHT22_PORT 22
 //BMP085 uses I2C and Wire
@@ -43,12 +41,12 @@
 // Polling frequencies
 #define DHT22_INTERVAL_MS 3000
 #define BMP085_INTERVAL_MS 1000
-//#define CAMERA_INTERVAL_INACTIVE_MS (1000*60*60)    // 1 hr
-#define CAMERA_INTERVAL_INACTIVE_MS (1000*30)      // TODO replace debug
+//#define CAMERA_INTERVAL_INACTIVE_MS (1000*60*5)
+#define CAMERA_INTERVAL_INACTIVE_MS (1000*30)
 #define CAMERA_INTERVAL_ACTIVE_MS (1000*30)
 #define GPS_INTERVAL 1000
 #define TSL235_INTERVAL_MS 250
-#define ACCEL_INTERVAL 500   // TODO adjust   // NOTE TODO CHANGED
+#define ACCEL_INTERVAL 500   // TODO adjust
 #define UV_INTERVAL 250      // TODO
 //#define RAD_INTERVAL 99999   // N/A
 //#define SERVO_INTERVAL 99999 // N/A
@@ -58,15 +56,10 @@
 #define REST_THRESHOLD 5
 // How many G's should be considered launch TODO adjust
 #define LAUNCH_THRESHOLD 4
-//#define LAUNCH_THRESHOLD 1.5
-
-// Function prototypes
-void softReset(void);
 
 // Flight events
 bool hasLaunched = false;
 bool hasLanded = false;
-
 
 // Radiation detector state
 volatile bool _particleReceived;
@@ -79,27 +72,24 @@ File logFile_EVT;
 Scheduler __scheduler;
 
 // Set up interrupt
-/*
 ISR(TIMER2_OVF_vect) {
   RESET_TIMER2;
   __scheduler.__ulCounter++;    
 }
-*/
 
 // Instantiate tasks
 TempHumidity _tempHumidity(DHT22_PORT, DHT22_INTERVAL_MS);
+//Camera _camera(CAMERA_INTERVAL_INACTIVE_MS);
 GPS _gps(GPS_INTERVAL);
 LightIntensity _lightIntensity(TSL235_PORT, TSL235_INTERVAL_MS,
     false); //morse true/false
 Accelerometer _accelerometer(ACCEL_INTERVAL);
-Camera _camera(CAMERA_INTERVAL_INACTIVE_MS, &_accelerometer);
 UV _uv(UV_PORT, UV_INTERVAL);
 Pressure _pressure(BMP085_INTERVAL_MS);
 
 void setup() {
     Serial1.begin(9600);
     Serial1.println("Start");
-/*
 
     // Power
     pinMode(POWER_PIN, OUTPUT);
@@ -110,122 +100,62 @@ void setup() {
         Serial1.println("WARNING! SD CARD NOT FOUND");
     }
 
-    // Prepare servos
-    //pan.attach(7);
-    //roll.attach(6);
-*/
-
     // Prepare tasks
     _tempHumidity.setup();
     //_camera.setup();
-    //_gps.setup();
-    //_lightIntensity.setup();
-    //_accelerometer.setup();
-    //_uv.setup();
-    //_pressure.setup();   // this really does need to be at the end
+    _gps.setup();
+    _lightIntensity.setup();
+    _accelerometer.setup();
+    _uv.setup();
+    _pressure.setup();   // this really does need to be at the end
     
     // Start the scheduler
     __scheduler.setup();
     
     // Start each task
     __scheduler.queue(&_tempHumidity);
-    //__scheduler.queue(&_pressure);
+    __scheduler.queue(&_pressure);
     //__scheduler.queue(&_camera);
-    //__scheduler.queue(&_gps);
-    //__scheduler.queue(&_lightIntensity);
-    //__scheduler.queue(&_accelerometer);
-    //__scheduler.queue(&_uv);
+    __scheduler.queue(&_gps);
+    __scheduler.queue(&_lightIntensity);
+    __scheduler.queue(&_accelerometer);
+    __scheduler.queue(&_uv);
 
-/*
     // Set up radiation detector
     pinMode(RAD_INTERRUPT_PIN, INPUT);     // default state of interrupt-pin
     //digitalWrite(RAD_INTERRUPT_PIN, HIGH); // turn on pull-up resistor
-    //fsfattachInterrupt(RAD_INTERRUPT, ParticleDataSetter, RISING);
+    attachInterrupt(RAD_INTERRUPT, ParticleDataSetter, RISING);
 
     // Open log file for radiation detector
     logFile_RAD = SD.open("RADIATN.LOG", FILE_WRITE);
 
     // Open log file for "flight events" (launch/landing)
     logFile_EVT = SD.open("EVENTS.LOG", FILE_WRITE);
-*/
 }
 
 void loop() {  
     __scheduler.processMessages();
-/*
+
     static int rest_count = 0;    // init only happens once
     float current_g = _accelerometer.readMagnitudeAccel();
 
-    // Networking command protocol
-
-    static int cmd_chars = 0;    // init only happens once
-    int buffered_chars = Serial1.available();
-    for(int i=0; i<buffered_chars; i++) {
-        int cur_char = Serial1.read();
-        if (cur_char == 'W') {
-            Serial1.print("W... ");
-            cmd_chars++;
-        } else {
-            // received a character other than upper case 'W'
-            // if we noticed 3 command characters before this
-            // enter command mode
-            if (cmd_chars >= 3) {
-              if (cur_char == 'A') {
-                  Serial1.print("(A)ctivating the bus... ");
-                  // (A)ctivate the bus
-                  digitalWrite(POWER_PIN, HIGH);     // on
-                  Serial1.println("bus activated!!");
-                  Serial1.println("Rebooting in 100ms...");
-                  Serial1.flush();
-                  delay(100);
-                  cmd_chars = 0;
-                  // Reset the microcontroller (s.t. all sensors initialized)
-                  softReset(); // TODO only use this if we really have to
-              } else if (cur_char == 'D') {
-                  Serial1.print("(D)eactivating the bus... ");
-                  // (D)eactivate the bus
-                  digitalWrite(POWER_PIN, LOW);     // off
-                  Serial1.println("bus deactivated!!");
-                  //Serial1.println("Rebooting in 100ms...");
-                  //Serial1.flush();
-                  //delay(100);
-                  cmd_chars = 0;
-                  // Reset the microcontroller (s.t. all blocking sensors
-                  //                            are offline)
-                  //softReset(); // TODO only use this if we really have to
-              } else {
-                  // Print and log "UNKNOWN COMMAND"
-                  cmd_chars = 0;
-              }
-            } else {
-               // didn't notice 3 command characters before this
-               // non-command character -- return to initial state
-               cmd_chars = 0;
-            }
-        }
-    }
-
-
-    // Stuff to execute "every second" more or less
-    if(millis() % 1000 == 0) { // nvm
+    // Execute "every second" more or less
+    if(millis() % 1000 == 0) {
+        Serial1.print("executing > current_g = ");
+        Serial1.println(current_g);
         // Detect launch
-        if(hasLaunched == false && current_g > LAUNCH_THRESHOLD) {
+        if(current_g > LAUNCH_THRESHOLD) {
             // Alert
+            Serial1.println("WARNING: Launch detected");
+            logFile_EVT.println("WARNING: Launch detected");  // SD
+
             // do stuff here that must occur only ONCE when launch is
             // detected
-            Serial1.println("WARNING: Launch detected");
-            Serial1.print("Gees: ");
-            Serial1.println(current_g);
-            logFile_EVT.println("WARNING: Launch detected");  // SD
-            logFile_EVT.print("Gees: "); // SD
-            logFile_EVT.println(current_g); // SD
-
-            //_camera.set_interval(&__scheduler,
-            //      CAMERA_INTERVAL_ACTIVE_MS);  // speed up
+            if(!hasLaunched)
+                _uv.set_interval(&__scheduler, 250);  // speed up TODO remove
 
             hasLaunched = true;
         }
-  
 
         // Detect landing
         if (hasLaunched && (0.995 < current_g) && (current_g < 1.005)) {
@@ -238,6 +168,7 @@ void loop() {
                 // detected
                 // if(!hasLaunched) { ...
 
+                // TODO: Orient cameras
                 hasLanded = true;
             }
         } else {
@@ -245,8 +176,7 @@ void loop() {
         }
     }
 
-
-    // Put checking for one-time events here
+    /* Put checking for one-time events here */
     if(_particleReceived) {
         _particleReceived = false;
         LogParticle(_particleIntensity);
@@ -255,7 +185,6 @@ void loop() {
         //Serial.print("heartbeat ->");
         //Serial.println(millis());
     //}
-    */
 }
 
 // For Teviso RD1014 radiation detector
@@ -284,11 +213,6 @@ void LogParticle(int intensity)
 
     // Make sure updates to the file were saved
     logFile_RAD.flush();
-}
-
-void softReset()
-{
-asm volatile ("  jmp 0");
 }
 
 

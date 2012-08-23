@@ -3,8 +3,6 @@
 
 #include "Pressure.h"
 
-long start;   // temp variable that will be used everywhere
-
 //------------------------------------------------------------------------
 Pressure::Pressure(int i_ms) {
     OSS = 0;  // Oversampling Setting
@@ -13,26 +11,14 @@ Pressure::Pressure(int i_ms) {
 }
 
 //------------------------------------------------------------------------
-//Global
-File logFile_PR;
-
 void Pressure::setup() {
-    delay(500); //debug
-    Serial1.begin(9600);
+    Serial.begin(9600);
     Wire.begin();
-    logFile_PR = SD.open("PRESSURE.LOG", FILE_WRITE);
-
-    Serial1.println("#BMP085: Wire has been initialized");
-    logFile_PR.println("#BMP085: Wire has been initialized");
-
-    Serial1.print("#BMP085: Calibrating... ");
-    logFile_PR.print("#BMP085: Calibrating... ");
+    Serial.println("#BMP085: Wire has been initialized");
+    Serial.print("#BMP085: Calibrating... ");
 
     bmp085Calibration();
-    Serial1.println("done!");
-    logFile_PR.println("done!");
-
-    logFile_PR.close();
+    Serial.println("done!");
 }
 
 //------------------------------------------------------------------------
@@ -40,33 +26,19 @@ void Pressure::run(Scheduler * scheduler) {
     // Schedule task to recur after "interval" ms
     scheduler -> schedule(this, interval);
 
-    // SD: Open file anew
-    logFile_PR = SD.open("PRESSURE.LOG", FILE_WRITE);
-
     temperature = bmp085GetTemperature(bmp085ReadUT());
     pressure = bmp085GetPressure(bmp085ReadUP());
-    Serial1.print("BMP085>>");
-    logFile_PR.print("BMP085>>");
-    Serial1.print(" ");
-    logFile_PR.print(" ");
-    Serial1.print(millis());
-    logFile_PR.print(millis());
-    Serial1.print(" ");
-    logFile_PR.print(" ");
-    Serial1.print(pressure, DEC);
-    logFile_PR.print(pressure, DEC);
+    Serial.print("BMP085>>");
+    Serial.print(" ");
+    Serial.print(millis());
+    Serial.print(" ");
+    Serial.print(pressure, DEC);
     //Serial.print(" Pa; ");
     //Serial.print("Temperature>>");
-    Serial1.print(" ");
-    logFile_PR.print(" ");
+    Serial.print(" ");
     char buf[10];
-    Serial1.print(dtostrf(temperature*0.1, 2, 2, buf));
-    logFile_PR.print(dtostrf(temperature*0.1, 2, 2, buf));
+    Serial.print(dtostrf(temperature*0.1, 2, 2, buf));
     //Serial.println(" deg C");
-   Serial1.println();
-   logFile_PR.println();
-
-    logFile_PR.close();  // SD: Ensure that file is written by closing it
 }
 
 // Stores all of the bmp085's calibration values into global variables
@@ -149,9 +121,7 @@ char Pressure::bmp085Read(unsigned char address)
   Wire.endTransmission();
   
   Wire.requestFrom(BMP085_ADDRESS, 1);
-
-  start = millis();
-  while(!Wire.available() && millis() - start < 100)
+  while(!Wire.available())
     ;
     
   return Wire.read();
@@ -170,8 +140,7 @@ int Pressure::bmp085ReadInt(unsigned char address)
   Wire.endTransmission();
   
   Wire.requestFrom(BMP085_ADDRESS, 2);
-  start = millis();
-  while(Wire.available()<2 && millis() - start < 100)
+  while(Wire.available()<2)
     ;
   msb = Wire.read();
   lsb = Wire.read();
@@ -226,8 +195,7 @@ unsigned long Pressure::bmp085ReadUP()
   Wire.requestFrom(BMP085_ADDRESS, 3);
   
   // Wait for data to become available
-  start = millis();
-  while(Wire.available() < 3 && millis() - start < 100)
+  while(Wire.available() < 3)
     ;
   msb = Wire.read();
   lsb = Wire.read();
@@ -236,12 +204,4 @@ unsigned long Pressure::bmp085ReadUP()
   up = (((unsigned long) msb << 16) | ((unsigned long) lsb << 8) | (unsigned long) xlsb) >> (8-OSS);
   
   return up;
-}
-
-//------------------------------------------------------------------------
-// PSF Mod - Set interval at loop time
-void Pressure::set_interval(Scheduler * scheduler, int new_interval)
-{
-    interval = new_interval;
-    scheduler -> schedule(this, new_interval);
 }
